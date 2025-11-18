@@ -58,7 +58,8 @@ function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <h1 className="text-blue-600 fixed top-5 left-10"><Link href="/">Home</Link></h1>
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
 
