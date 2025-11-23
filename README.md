@@ -38,3 +38,14 @@ AssetCrate connects both sides in one platform.
 - `POST /api/auth/signup` — Register user  
 - `POST /api/auth/login` — Login user  
 
+## User Roles
+- **User**: Can download and favorite assets
+- **Creator**: Can download, upload, and manage their own assets
+- **Admin**: Supervises asset approval for platform security (admin only)
+
+## Pages
+- **Landing**: Marketing page with features and CTAs
+- **Browse/Store**: Asset catalog with search, filters, and pagination
+- **Dashboard**: Role-based dashboards (User/Creator/Admin)
+- **Profile**: User settings, favorites, and uploaded assets
+- **Asset Detail**: Individual asset page with full description and download links
