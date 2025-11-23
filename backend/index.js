@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log('✅ MongoDB connected successfully'))
+.catch((err) => console.error('❌ MongoDB connection error:', err));
+
+// Routes
+const authRoutes = require('./user/authRoutes');
+const assetRoutes = require('./assets/assetRoutes');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/assets', assetRoutes);
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -19,8 +32,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// TODO: MongoDB connection will be added here
-// TODO: Routes will be imported and used here
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    success: false, 
+    message: 'Something went wrong!' 
+  });
+});
 
 // Start server
 app.listen(PORT, () => {

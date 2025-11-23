@@ -1,103 +1,121 @@
+'use client';
+
 import Link from 'next/link';
 import { FaXTwitter, FaDiscord, FaReddit } from 'react-icons/fa6';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    router.push('/');
+  };
+
+  const handleBrowseAssets = () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    } else {
+      router.push('/browse');
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div className="container-custom py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 gradient-bg-primary rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-2xl">A</span>
-              </div>
-              <span className="text-2xl font-bold text-gray-900">AssetCrate</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="#features" className="text-sm font-semibold text-gray-700 hover:text-purple-600 transition-colors">
-                Features
-              </Link>
-              <Link href="#roles" className="text-sm font-semibold text-gray-700 hover:text-purple-600 transition-colors">
-                For Creators
-              </Link>
-              <Link href="#how-it-works" className="text-sm font-semibold text-gray-700 hover:text-purple-600 transition-colors">
-                How It Works
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/login"
-                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-purple-600 transition-colors"
-              >
-                Log In
-              </Link>
-              <Link
-                href="/signup"
-                className="px-6 py-3 text-sm font-semibold text-white gradient-bg-primary rounded-full hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Hero Section */}
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '4s' }}></div>
-        </div>
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-[#050505]">
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <h1 className="mb-6">
-              Build Epic Games with <span className="gradient-text">Premium Assets</span>
+        {/* Vibrant Floating Orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
+
+        <div className="container-custom relative z-10">
+          <div className="max-w-5xl mx-auto text-center animate-fade-in">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-purple-300 text-sm font-semibold mb-8 animate-slide-up backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+              </span>
+              The #1 Marketplace for Game Assets
+            </div>
+
+            <h1 className="mb-8 text-6xl md:text-7xl tracking-tight text-white">
+              Build Epic Games with <br />
+              <span className="gradient-text font-extrabold drop-shadow-lg">Premium Assets</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              The ultimate marketplace for game developers. Discover thousands of free, high-quality 3D models, textures, sounds, and scripts—all in one place.
+
+            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+              Discover thousands of high-quality 3D models, textures, sounds, and scripts.
+              Join a community of <span className="font-semibold text-white">10,000+</span> creators building the future of gaming.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/browse"
-                className="px-8 py-4 text-lg font-semibold text-white gradient-bg-primary rounded-full hover:opacity-90 transition-all shadow-xl hover:shadow-2xl hover:scale-105"
+
+            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-16">
+              <button
+                onClick={handleBrowseAssets}
+                className="group relative px-8 py-4 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1 overflow-hidden"
               >
-                Browse Assets
-              </Link>
+                <span className="relative z-10 flex items-center gap-2">
+                  Browse Assets
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+              </button>
               <Link
-                href="/signup"
-                className="px-8 py-4 text-lg font-semibold border-2 border-purple-600 text-purple-600 rounded-full hover:bg-purple-50 transition-all"
+                href={isAuthenticated ? '/dashboard' : '/signup'}
+                className="px-8 py-4 text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1"
               >
-                Start Creating
+                {isAuthenticated ? 'Go to Dashboard' : 'Start Creating'}
               </Link>
             </div>
-            <div className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>100% Free</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Secure Downloads</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Community Driven</span>
-              </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-12 max-w-4xl mx-auto">
+              {[
+                { label: 'Active Users', value: '10K+' },
+                { label: 'Assets', value: '50K+' },
+                { label: 'Downloads', value: '1M+' },
+                { label: 'Creators', value: '500+' },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-sm text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
+      <section id="features" className="py-32 bg-[#0a0a0a] relative">
         <div className="container-custom">
-          <div className="text-center mb-16 animate-slide-up">
-            <h2 className="mb-4">Everything You Need</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              A complete platform designed for game developers and asset creators
+          <div className="text-center mb-20">
+            <h2 className="mb-6 text-4xl md:text-5xl text-white">Everything You Need</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              A complete platform designed to streamline your game development workflow
             </p>
           </div>
 
@@ -106,42 +124,49 @@ export default function Home() {
               {
                 icon: '🎨',
                 title: 'Diverse Asset Library',
-                description: 'Access thousands of 3D models, textures, sounds, and scripts for your game projects.'
+                description: 'Access thousands of 3D models, textures, sounds, and scripts for your game projects.',
+                color: 'bg-purple-500/10 text-purple-400 border-purple-500/20'
               },
               {
                 icon: '🔍',
-                title: 'Smart Search & Filters',
-                description: 'Find exactly what you need with powerful search and category filtering.'
+                title: 'Smart Search',
+                description: 'Find exactly what you need with AI-powered search and advanced category filtering.',
+                color: 'bg-blue-500/10 text-blue-400 border-blue-500/20'
               },
               {
                 icon: '⚡',
                 title: 'Instant Downloads',
-                description: 'Quick and secure downloads with support for external links like Drive and itch.io.'
+                description: 'Quick and secure downloads with support for external links like Drive and itch.io.',
+                color: 'bg-green-500/10 text-green-400 border-green-500/20'
               },
               {
                 icon: '🖼️',
-                title: 'Image Previews',
-                description: 'See what you\'re getting with high-quality preview images for every asset.'
+                title: 'HD Previews',
+                description: 'See what you\'re getting with interactive 3D viewers and high-quality image galleries.',
+                color: 'bg-pink-500/10 text-pink-400 border-pink-500/20'
               },
               {
                 icon: '❤️',
-                title: 'Favorites & Collections',
-                description: 'Save your favorite assets and organize them into custom collections.'
+                title: 'Collections',
+                description: 'Save your favorite assets and organize them into custom project boards.',
+                color: 'bg-orange-500/10 text-orange-400 border-orange-500/20'
               },
               {
                 icon: '🛡️',
-                title: 'Verified & Safe',
-                description: 'All assets are reviewed and approved to ensure quality and security.'
+                title: 'Verified Quality',
+                description: 'All assets are manually reviewed by our team to ensure top-tier quality and security.',
+                color: 'bg-teal-500/10 text-teal-400 border-teal-500/20'
               }
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-2xl hover-lift animate-slide-up border border-gray-200 shadow-md hover:shadow-xl transition-all"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="group bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.07]"
               >
-                <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="mb-3 text-xl font-bold text-gray-900">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                <div className={`w-14 h-14 ${feature.color} border rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  {feature.icon}
+                </div>
+                <h3 className="mb-3 text-xl font-bold text-white group-hover:text-purple-400 transition-colors">{feature.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -149,81 +174,81 @@ export default function Home() {
       </section>
 
       {/* Roles Section */}
-      <section id="roles" className="py-20">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="mb-4">Choose Your Path</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Whether you're looking for assets or sharing your creations, we've got you covered
+      <section id="roles" className="py-32 bg-black relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+        <div className="container-custom relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="mb-6 text-4xl md:text-5xl text-white">Choose Your Path</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Whether you're building games or creating assets, we have the perfect tools for you
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* User Role */}
-            <div className="bg-white p-10 rounded-3xl shadow-lg hover-lift border-2 border-gray-200 hover:border-purple-300 transition-all">
-              <div className="w-16 h-16 gradient-bg-secondary rounded-2xl flex items-center justify-center mb-6 shadow-md">
-                <span className="text-3xl">👤</span>
+            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-20 h-20 gradient-bg-secondary rounded-3xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <span className="text-4xl">👤</span>
               </div>
-              <h3 className="mb-4 text-gray-900">For Developers</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <h3 className="mb-4 text-3xl font-bold text-white">For Developers</h3>
+              <p className="text-lg text-gray-400 mb-8 leading-relaxed">
                 Perfect for game developers looking for quality assets to bring their projects to life.
               </p>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-4 mb-10">
                 {[
                   'Download unlimited assets',
                   'Save favorites for later',
                   'Access curated collections',
-                  'Get instant updates on new assets'
+                  'Get instant updates'
                 ].map((benefit, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <svg className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-700">{benefit}</span>
+                  <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
+                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    {benefit}
                   </li>
                 ))}
               </ul>
               <Link
-                href="/signup?role=developer"
-                className="block w-full py-3 text-center font-semibold gradient-bg-secondary text-white rounded-full hover:opacity-90 transition-opacity shadow-md"
+                href={isAuthenticated ? '/dashboard' : '/signup?role=developer'}
+                className="block w-full py-4 text-center text-lg font-bold gradient-bg-secondary text-white rounded-2xl hover:opacity-90 transition-opacity shadow-lg"
               >
-                Join as Developer
+                {isAuthenticated ? 'Go to Dashboard' : 'Join as Developer'}
               </Link>
             </div>
 
             {/* Creator Role */}
-            <div className="bg-white p-10 rounded-3xl shadow-lg hover-lift border-2 border-purple-400 relative overflow-hidden">
-              <div className="absolute top-4 right-4 px-3 py-1 gradient-bg-accent text-white text-xs font-bold rounded-full shadow-md">
-                POPULAR
+            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+
+              <div className="w-20 h-20 gradient-bg-primary rounded-3xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 relative z-10">
+                <span className="text-4xl">✨</span>
               </div>
-              <div className="w-16 h-16 gradient-bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-md">
-                <span className="text-3xl">✨</span>
-              </div>
-              <h3 className="mb-4 text-gray-900">For Creators</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <h3 className="mb-4 text-3xl font-bold text-white relative z-10">For Creators</h3>
+              <p className="text-lg text-gray-400 mb-8 leading-relaxed relative z-10">
                 Share your work with the community and build your portfolio as an asset creator.
               </p>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-4 mb-10 relative z-10">
                 {[
                   'Upload your assets',
                   'Showcase your portfolio',
-                  'Reach thousands of developers',
-                  'Build your reputation',
-                  'Download assets from others'
+                  'Reach global audience',
+                  'Build your reputation'
                 ].map((benefit, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <svg className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-700">{benefit}</span>
+                  <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
+                    <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    {benefit}
                   </li>
                 ))}
               </ul>
               <Link
-                href="/signup?role=creator"
-                className="block w-full py-3 text-center font-semibold gradient-bg-primary text-white rounded-full hover:opacity-90 transition-opacity shadow-lg"
+                href={isAuthenticated ? '/dashboard' : '/signup?role=creator'}
+                className="relative z-10 block w-full py-4 text-center text-lg font-bold gradient-bg-primary text-white rounded-2xl hover:opacity-90 transition-opacity shadow-lg"
               >
-                Join as Creator
+                {isAuthenticated ? 'Go to Dashboard' : 'Join as Creator'}
               </Link>
             </div>
           </div>
@@ -231,16 +256,19 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
+      <section id="how-it-works" className="py-32 bg-[#0a0a0a]">
         <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="mb-4">How It Works</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="mb-6 text-4xl md:text-5xl text-white">How It Works</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Get started in three simple steps
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
+            {/* Connecting Line Background */}
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+
             {[
               {
                 step: '01',
@@ -261,16 +289,13 @@ export default function Home() {
                 icon: '🎮'
               }
             ].map((step, index) => (
-              <div key={index} className="text-center relative">
-                <div className="w-20 h-20 mx-auto mb-6 gradient-bg-primary rounded-full flex items-center justify-center text-4xl shadow-lg">
+              <div key={index} className="text-center relative group z-10">
+                <div className="w-24 h-24 mx-auto mb-8 bg-[#0a0a0a] rounded-full border-4 border-purple-500/20 flex items-center justify-center text-4xl shadow-lg shadow-purple-500/10 group-hover:scale-110 group-hover:border-purple-500 transition-all duration-300">
                   {step.icon}
                 </div>
-                <div className="text-sm font-bold text-purple-600 mb-2">STEP {step.step}</div>
-                <h3 className="mb-3 text-xl">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
-                {index < 2 && (
-                  <div className="hidden md:block absolute top-10 -right-6 w-12 h-0.5 bg-gradient-to-r from-purple-400 to-transparent"></div>
-                )}
+                <div className="text-sm font-bold text-purple-400 mb-3 tracking-wider">STEP {step.step}</div>
+                <h3 className="mb-4 text-2xl font-bold text-white">{step.title}</h3>
+                <p className="text-gray-400 leading-relaxed max-w-xs mx-auto">{step.description}</p>
               </div>
             ))}
           </div>
@@ -278,24 +303,26 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-bg-primary opacity-5"></div>
+      <section className="py-32 relative overflow-hidden bg-black border-t border-white/5">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80"></div>
+
         <div className="container-custom relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="mb-6">Ready to Get Started?</h2>
-            <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-              Join thousands of game developers and creators sharing amazing assets
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="mb-8 text-4xl md:text-6xl text-white font-bold">Ready to Start Building?</h2>
+            <p className="text-xl md:text-2xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
+              Join thousands of game developers and creators sharing amazing assets today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link
-                href="/signup"
-                className="px-10 py-4 text-lg font-semibold text-white gradient-bg-primary rounded-full hover:opacity-90 transition-all shadow-xl hover:scale-105"
+                href={isAuthenticated ? '/dashboard' : '/signup'}
+                className="px-12 py-5 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1"
               >
-                Create Free Account
+                {isAuthenticated ? 'Go to Dashboard' : 'Create Free Account'}
               </Link>
               <Link
                 href="/browse"
-                className="px-10 py-4 text-lg font-semibold border-2 border-gray-300 rounded-full hover:border-purple-600 hover:text-purple-600 transition-all"
+                className="px-12 py-5 text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1"
               >
                 Explore Assets
               </Link>
@@ -305,79 +332,6 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="container-custom">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 gradient-bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">A</span>
-                </div>
-                <span className="text-xl font-bold text-white">AssetCrate</span>
-              </div>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Your trusted hub for discovering and sharing game assets.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Platform</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/browse" className="hover:text-white transition-colors">Browse Assets</Link></li>
-                <li><Link href="/categories" className="hover:text-white transition-colors">Categories</Link></li>
-                <li><Link href="/creators" className="hover:text-white transition-colors">Top Creators</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Connect</h4>
-              <div className="flex gap-3">
-                <a
-                  href="#twitter"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors"
-                  aria-label="Twitter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaXTwitter className="w-5 h-5 text-white" />
-                </a>
-                <a
-                  href="#discord"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors"
-                  aria-label="Discord"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaDiscord className="w-5 h-5 text-white" />
-                </a>
-                <a
-                  href="#reddit"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors"
-                  aria-label="Reddit"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaReddit className="w-5 h-5 text-white" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-            <p>&copy; 2025 AssetCrate. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
