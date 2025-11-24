@@ -16,12 +16,12 @@ interface AssetProps {
 export default function AssetCard({ asset }: { asset: AssetProps }) {
     return (
         <Link href={`/asset/${asset._id}`} className="group block h-full">
-            <div className="bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20 h-full flex flex-col relative">
+            <div className="bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 h-full flex flex-col relative">
                 {/* Glow Effect on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-purple-500/5 group-hover:via-purple-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/5 group-hover:via-cyan-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl"></div>
 
                 {/* Thumbnail */}
-                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-cyan-900/20 to-blue-900/20">
                     <img
                         src={asset.imageUrl}
                         alt={asset.title}
@@ -30,7 +30,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';
                             target.parentElement!.innerHTML = `
-                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-pink-900/40 relative overflow-hidden">
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-900/40 via-blue-900/30 to-blue-900/40 relative overflow-hidden">
                                     <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.05) 10px, rgba(255,255,255,.05) 20px);"></div>
                                     <div class="relative z-10 text-center">
                                         <div class="text-white/80 text-lg font-semibold mb-2">Preview Unavailable</div>
@@ -57,7 +57,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                     )}
 
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                    <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                         <div className="flex items-center gap-2 text-white text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             View Details
                             <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
@@ -67,7 +67,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
 
                 {/* Content */}
                 <div className="p-5 flex flex-col flex-grow relative z-10">
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300 line-clamp-1">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300 line-clamp-1">
                         {asset.title}
                     </h3>
 
@@ -87,7 +87,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 text-gray-400 group-hover:text-purple-400 transition-colors">
+                        <div className="flex items-center gap-1.5 text-gray-400 group-hover:text-cyan-400 transition-colors">
                             <FaDownload className="text-xs" />
                             <span className="text-sm font-medium">
                                 {asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}
@@ -98,7 +98,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                     {/* Price Tag */}
                     {asset.price > 0 && (
                         <div className="mt-3 text-center">
-                            <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg">
+                            <div className="inline-block px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg">
                                 <span className="text-lg font-bold gradient-text">${asset.price}</span>
                             </div>
                         </div>

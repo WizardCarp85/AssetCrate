@@ -49,7 +49,7 @@ export default function Navbar() {
             <div className="container-custom">
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 gradient-bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all duration-300">
+                        <div className="w-10 h-10 gradient-bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
                             <span className="text-white font-bold text-xl">A</span>
                         </div>
                         <span className="text-xl font-bold text-white tracking-tight">AssetCrate</span>
@@ -76,14 +76,17 @@ export default function Navbar() {
                             </div>
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10 hover:border-purple-500/30 transition-colors">
+                                    <Link
+                                        href="/profile"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10 hover:border-cyan-500/50 hover:bg-white/10 transition-all cursor-pointer"
+                                    >
                                         <div className="w-6 h-6 rounded-full gradient-bg-secondary flex items-center justify-center text-xs text-white font-bold shadow-sm">
                                             {user?.username?.charAt(0).toUpperCase()}
                                         </div>
                                         <span className="text-sm font-semibold text-gray-200">
                                             {user?.username}
                                         </span>
-                                    </div>
+                                    </Link>
                                 </div>
                                 <button
                                     onClick={handleLogout}
@@ -116,7 +119,7 @@ export default function Navbar() {
                                 </Link>
                                 <Link
                                     href="/signup"
-                                    className="px-6 py-2.5 text-sm font-semibold text-white gradient-bg-primary rounded-full hover:opacity-90 transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105"
+                                    className="px-6 py-2.5 text-sm font-semibold text-white gradient-bg-primary rounded-full hover:opacity-90 transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105"
                                 >
                                     Get Started
                                 </Link>

@@ -96,18 +96,18 @@
 
 @layer utilities {
   .gradient-text {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
     -webkit-background-clip: text;
-    background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .gradient-bg-primary {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
   }
 
   .gradient-bg-secondary {
-    background: var(--gradient-secondary);
+    background: linear-gradient(135deg, #00b8ff 0%, #0088ff 100%);
   }
 
   .gradient-bg-accent {

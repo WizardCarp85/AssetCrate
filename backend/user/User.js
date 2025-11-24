@@ -22,15 +22,35 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long']
   },
-  role: {
-    type: String,
-    enum: ['developer', 'creator'],
-    default: 'developer'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+    role: {
+        type: String,
+        enum: ['developer', 'creator'],
+        required: true
+    },
+    bio: {
+        type: String,
+        maxlength: 500,
+        default: ''
+    },
+    location: {
+        type: String,
+        default: ''
+    },
+    website: {
+        type: String,
+        default: ''
+    },
+    avatar: {
+        type: String,
+        default: ''
+    },
+    socialLinks: {
+        twitter: { type: String, default: '' },
+        discord: { type: String, default: '' },
+        github: { type: String, default: '' }
+    }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -62,15 +62,15 @@ export default function BrowsePage() {
         <div className="min-h-screen bg-[#050505] relative overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             {/* Hero Section */}
             <section className="pt-32 pb-16 relative">
                 <div className="container-custom relative z-10">
                     <div className="max-w-4xl mx-auto text-center mb-12 animate-fade-in">
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-purple-300 text-sm font-semibold mb-6 backdrop-blur-sm">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-sm font-semibold mb-6 backdrop-blur-sm">
                             <FaFire className="text-orange-400 animate-pulse" />
                             Trending Assets
                         </div>
@@ -85,10 +85,10 @@ export default function BrowsePage() {
 
                         {/* Search Bar - Enhanced */}
                         <div className="relative max-w-2xl mx-auto group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                             <div className="relative bg-[#0a0a0a] rounded-2xl p-[2px] shadow-2xl">
                                 <div className="bg-[#111] rounded-2xl flex items-center overflow-hidden">
-                                    <div className="pl-6 pr-4 text-gray-500 group-hover:text-purple-400 transition-colors">
+                                    <div className="pl-6 pr-4 text-gray-500 group-hover:text-cyan-400 transition-colors">
                                         <FaMagnifyingGlass className="text-xl" />
                                     </div>
                                     <input
@@ -117,7 +117,7 @@ export default function BrowsePage() {
                                     key={cat}
                                     onClick={() => handleFilterChange('category', cat)}
                                     className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${filters.category === cat
-                                        ? 'gradient-bg-primary text-white shadow-lg shadow-purple-500/30'
+                                        ? 'gradient-bg-primary text-white shadow-lg shadow-cyan-500/30'
                                         : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
                                         }`}
                                 >
@@ -149,7 +149,7 @@ export default function BrowsePage() {
                                             key={cat}
                                             onClick={() => handleFilterChange('category', cat)}
                                             className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center justify-between group ${(filters.category === cat || (cat === 'All' && !filters.category))
-                                                ? 'gradient-bg-primary text-white shadow-lg shadow-purple-500/20'
+                                                ? 'gradient-bg-primary text-white shadow-lg shadow-cyan-500/20'
                                                 : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                                 }`}
                                         >
@@ -182,7 +182,7 @@ export default function BrowsePage() {
                                             key={option.value}
                                             onClick={() => handleFilterChange('sort', option.value)}
                                             className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${filters.sort === option.value
-                                                ? 'bg-white/10 text-white border border-purple-500/50'
+                                                ? 'bg-white/10 text-white border border-cyan-500/50'
                                                 : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                                 }`}
                                         >
@@ -193,7 +193,7 @@ export default function BrowsePage() {
                             </div>
 
                             {/* Stats Card */}
-                            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-purple-500/20 shadow-2xl">
+                            <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 shadow-2xl">
                                 <div className="text-center">
                                     <div className="text-4xl font-bold gradient-text mb-2">{totalAssets}</div>
                                     <div className="text-sm text-gray-400">Total Assets</div>
@@ -264,7 +264,7 @@ export default function BrowsePage() {
                                                                 key={pageNum}
                                                                 onClick={() => handlePageChange(pageNum)}
                                                                 className={`w-10 h-10 rounded-xl font-medium transition-all ${currentPage === pageNum
-                                                                    ? 'gradient-bg-primary text-white shadow-lg shadow-purple-500/30'
+                                                                    ? 'gradient-bg-primary text-white shadow-lg shadow-cyan-500/30'
                                                                     : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
                                                                     }`}
                                                             >

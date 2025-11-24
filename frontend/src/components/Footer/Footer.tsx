@@ -21,19 +21,19 @@ export default function Footer() {
                     <div>
                         <h4 className="text-white font-semibold mb-4">Platform</h4>
                         <ul className="space-y-2 text-sm">
-                            <li><Link href="/browse" className="hover:text-purple-400 transition-colors">Browse Assets</Link></li>
-                            <li><Link href="/categories" className="hover:text-purple-400 transition-colors">Categories</Link></li>
-                            <li><Link href="/creators" className="hover:text-purple-400 transition-colors">Top Creators</Link></li>
+                            <li><Link href="/browse" className="hover:text-cyan-400 transition-colors">Browse Assets</Link></li>
+                            <li><Link href="/categories" className="hover:text-cyan-400 transition-colors">Categories</Link></li>
+                            <li><Link href="/creators" className="hover:text-cyan-400 transition-colors">Top Creators</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-white font-semibold mb-4">Company</h4>
                         <ul className="space-y-2 text-sm">
-                            <li><Link href="/about" className="hover:text-purple-400 transition-colors">About Us</Link></li>
-                            <li><Link href="/contact" className="hover:text-purple-400 transition-colors">Contact</Link></li>
-                            <li><Link href="/terms" className="hover:text-purple-400 transition-colors">Terms of Service</Link></li>
-                            <li><Link href="/privacy" className="hover:text-purple-400 transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link></li>
+                            <li><Link href="/contact" className="hover:text-cyan-400 transition-colors">Contact</Link></li>
+                            <li><Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link></li>
                         </ul>
                     </div>
 
@@ -42,7 +42,7 @@ export default function Footer() {
                         <div className="flex gap-3">
                             <a
                                 href="#twitter"
-                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 transition-all"
+                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-cyan-600 hover:border-cyan-600 transition-all"
                                 aria-label="Twitter"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -51,7 +51,7 @@ export default function Footer() {
                             </a>
                             <a
                                 href="#discord"
-                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 transition-all"
+                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-cyan-600 hover:border-cyan-600 transition-all"
                                 aria-label="Discord"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -60,7 +60,7 @@ export default function Footer() {
                             </a>
                             <a
                                 href="#reddit"
-                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 transition-all"
+                                className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-cyan-600 hover:border-cyan-600 transition-all"
                                 aria-label="Reddit"
                                 target="_blank"
                                 rel="noopener noreferrer"

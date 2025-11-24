@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaXTwitter, FaDiscord, FaReddit, FaPalette, FaMagnifyingGlass, FaBolt, FaImage, FaHeart, FaShieldHalved, FaPenToSquare, FaRocket, FaGamepad } from 'react-icons/fa6';
+import { FaXTwitter, FaDiscord, FaReddit, FaPalette, FaMagnifyingGlass, FaBolt, FaImage, FaHeart, FaShieldHalved, FaPenToSquare, FaRocket, FaGamepad, FaWandMagicSparkles, FaUser } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -48,16 +48,16 @@ export default function Home() {
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
         {/* Vibrant Floating Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
 
         <div className="container-custom relative z-10">
           <div className="max-w-5xl mx-auto text-center animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-purple-300 text-sm font-semibold mb-8 animate-slide-up backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-sm font-semibold mb-8 animate-slide-up backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
               </span>
               The #1 Marketplace for Game Assets
             </div>
@@ -75,7 +75,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-16">
               <button
                 onClick={handleBrowseAssets}
-                className="group relative px-8 py-4 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1 overflow-hidden"
+                className="group relative px-8 py-4 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-lg hover:shadow-cyan-500/25 hover:-translate-y-1 overflow-hidden"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Browse Assets
@@ -125,25 +125,25 @@ export default function Home() {
                 icon: FaPalette,
                 title: 'Diverse Asset Library',
                 description: 'Access thousands of 3D models, textures, sounds, and scripts for your game projects.',
-                color: 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
               },
               {
                 icon: FaMagnifyingGlass,
                 title: 'Smart Search',
                 description: 'Find exactly what you need with AI-powered search and advanced category filtering.',
-                color: 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
               },
               {
                 icon: FaBolt,
                 title: 'Instant Downloads',
                 description: 'Quick and secure downloads with support for external links like Drive and itch.io.',
-                color: 'bg-green-500/10 text-green-400 border-green-500/20'
+                color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
               },
               {
                 icon: FaImage,
                 title: 'HD Previews',
                 description: 'See what you\'re getting with interactive 3D viewers and high-quality image galleries.',
-                color: 'bg-pink-500/10 text-pink-400 border-pink-500/20'
+                color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
               },
               {
                 icon: FaHeart,
@@ -160,12 +160,12 @@ export default function Home() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.07]"
+                className="group bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.07]"
               >
                 <div className={`w-14 h-14 ${feature.color} border rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <feature.icon className="text-2xl" />
                 </div>
-                <h3 className="mb-3 text-xl font-bold text-white group-hover:text-purple-400 transition-colors">{feature.title}</h3>
+                <h3 className="mb-3 text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{feature.title}</h3>
                 <p className="text-gray-400 leading-relaxed">{feature.description}</p>
               </div>
             ))}
@@ -187,9 +187,9 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* User Role */}
-            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2">
+            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-2">
               <div className="w-20 h-20 gradient-bg-secondary rounded-3xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <span className="text-4xl">👤</span>
+                <FaUser className="text-4xl text-white" />
               </div>
               <h3 className="mb-4 text-3xl font-bold text-white">For Developers</h3>
               <p className="text-lg text-gray-400 mb-8 leading-relaxed">
@@ -203,7 +203,7 @@ export default function Home() {
                   'Get instant updates'
                 ].map((benefit, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
-                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     {benefit}
@@ -219,11 +219,11 @@ export default function Home() {
             </div>
 
             {/* Creator Role */}
-            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
               <div className="w-20 h-20 gradient-bg-primary rounded-3xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 relative z-10">
-                <span className="text-4xl">✨</span>
+                <FaWandMagicSparkles className="text-4xl text-white" />
               </div>
               <h3 className="mb-4 text-3xl font-bold text-white relative z-10">For Creators</h3>
               <p className="text-lg text-gray-400 mb-8 leading-relaxed relative z-10">
@@ -237,7 +237,7 @@ export default function Home() {
                   'Build your reputation'
                 ].map((benefit, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
-                    <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     {benefit}
@@ -267,7 +267,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
             {/* Connecting Line Background */}
-            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
 
             {[
               {
@@ -290,10 +290,10 @@ export default function Home() {
               }
             ].map((step, index) => (
               <div key={index} className="text-center relative group z-10">
-                <div className="w-24 h-24 mx-auto mb-8 bg-[#0a0a0a] rounded-full border-4 border-purple-500/20 flex items-center justify-center text-4xl shadow-lg shadow-purple-500/10 group-hover:scale-110 group-hover:border-purple-500 transition-all duration-300">
-                  <step.icon className="text-3xl text-purple-400" />
+                <div className="w-24 h-24 mx-auto mb-8 bg-[#0a0a0a] rounded-full border-4 border-cyan-500/20 flex items-center justify-center text-4xl shadow-lg shadow-cyan-500/10 group-hover:scale-110 group-hover:border-cyan-500 transition-all duration-300">
+                  <step.icon className="text-3xl text-cyan-400" />
                 </div>
-                <div className="text-sm font-bold text-purple-400 mb-3 tracking-wider">STEP {step.step}</div>
+                <div className="text-sm font-bold text-cyan-400 mb-3 tracking-wider">STEP {step.step}</div>
                 <h3 className="mb-4 text-2xl font-bold text-white">{step.title}</h3>
                 <p className="text-gray-400 leading-relaxed max-w-xs mx-auto">{step.description}</p>
               </div>
@@ -316,7 +316,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link
                 href={isAuthenticated ? '/dashboard' : '/signup'}
-                className="px-12 py-5 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1"
+                className="px-12 py-5 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1"
               >
                 {isAuthenticated ? 'Go to Dashboard' : 'Create Free Account'}
               </Link>

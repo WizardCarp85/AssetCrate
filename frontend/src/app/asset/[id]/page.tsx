@@ -48,7 +48,7 @@ export default function AssetDetailsPage() {
     if (loading) return (
         <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white pt-20">
             <div className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="text-gray-400 animate-pulse text-lg">Loading asset...</p>
             </div>
         </div>
@@ -71,8 +71,8 @@ export default function AssetDetailsPage() {
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             <div className="container-custom relative z-10">
                 {/* Breadcrumb */}
@@ -91,7 +91,7 @@ export default function AssetDetailsPage() {
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Preview Image */}
-                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-900/20 to-blue-900/20 shadow-2xl shadow-purple-500/10 group">
+                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 shadow-2xl shadow-cyan-500/10 group">
                             <img
                                 src={asset.imageUrl}
                                 alt={asset.title}
@@ -100,7 +100,7 @@ export default function AssetDetailsPage() {
                                     const target = e.target as HTMLImageElement;
                                     target.style.display = 'none';
                                     target.parentElement!.innerHTML = `
-                                    <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-pink-900/40 relative overflow-hidden">
+                                    <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-900/40 via-blue-900/30 to-blue-900/40 relative overflow-hidden">
                                       <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.05) 20px, rgba(255,255,255,.05) 40px);"></div>
                                       <div class="relative z-10 text-center">
                                         <div class="text-white/90 text-2xl font-bold mb-3">Preview Unavailable</div>
@@ -145,7 +145,7 @@ export default function AssetDetailsPage() {
                                 {asset.tags.map((tag: string) => (
                                     <span
                                         key={tag}
-                                        className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-white/10 transition-all cursor-pointer"
+                                        className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:text-white hover:border-cyan-500/50 hover:bg-white/10 transition-all cursor-pointer"
                                     >
                                         #{tag}
                                     </span>
@@ -155,12 +155,12 @@ export default function AssetDetailsPage() {
 
                         {/* Stats Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl p-6 rounded-2xl border border-purple-500/20 text-center">
+                            <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
                                 <div className="text-3xl font-bold gradient-text mb-1">{asset.rating}</div>
                                 <div className="text-sm text-gray-400">Rating</div>
                             </div>
-                            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl p-6 rounded-2xl border border-blue-500/20 text-center">
-                                <div className="text-3xl font-bold text-blue-400 mb-1">{asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}</div>
+                            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
+                                <div className="text-3xl font-bold text-cyan-400 mb-1">{asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}</div>
                                 <div className="text-sm text-gray-400">Downloads</div>
                             </div>
                             <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl p-6 rounded-2xl border border-green-500/20 text-center">
@@ -211,7 +211,7 @@ export default function AssetDetailsPage() {
                                 href={asset.fileUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full py-4 gradient-bg-primary text-white font-bold rounded-xl shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50 hover:-translate-y-1 flex items-center justify-center gap-3 mb-4 group text-lg"
+                                className="w-full py-4 gradient-bg-primary text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all hover:shadow-cyan-500/50 hover:-translate-y-1 flex items-center justify-center gap-3 mb-4 group text-lg"
                             >
                                 <FaDownload className="group-hover:animate-bounce" />
                                 {asset.price === 0 ? 'Download Now' : 'Buy Now'}
