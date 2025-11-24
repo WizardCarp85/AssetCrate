@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { FaStar, FaDownload } from 'react-icons/fa6';
+import Image from 'next/image';
+import { FaStar, FaDownload, FaArrowRight } from 'react-icons/fa6';
 
 interface AssetProps {
     _id: string;
@@ -15,41 +16,93 @@ interface AssetProps {
 export default function AssetCard({ asset }: { asset: AssetProps }) {
     return (
         <Link href={`/asset/${asset._id}`} className="group block h-full">
-            <div className="bg-[#111] rounded-xl overflow-hidden border border-white/5 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/10 h-full flex flex-col">
+            <div className="bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20 h-full flex flex-col relative">
+                {/* Glow Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-purple-500/5 group-hover:via-purple-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl"></div>
+
                 {/* Thumbnail */}
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-purple-900/20 to-blue-900/20">
                     <img
                         src={asset.imageUrl}
                         alt={asset.title}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            target.parentElement!.innerHTML = `
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-pink-900/40 relative overflow-hidden">
+                                    <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.05) 10px, rgba(255,255,255,.05) 20px);"></div>
+                                    <div class="relative z-10 text-center">
+                                        <div class="text-white/80 text-lg font-semibold mb-2">Preview Unavailable</div>
+                                        <div class="text-gray-400 text-sm">Image could not be loaded</div>
+                                    </div>
+                                </div>
+                            `;
+                        }}
                     />
-                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-xs font-semibold text-white border border-white/10">
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+
+                    {/* Category Badge */}
+                    <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/20 shadow-lg">
                         {asset.category}
                     </div>
+
+                    {/* Free Badge */}
                     {asset.price === 0 && (
-                        <div className="absolute top-3 right-3 bg-green-500/90 backdrop-blur-md px-2 py-1 rounded-md text-xs font-bold text-white shadow-lg">
+                        <div className="absolute top-3 right-3 bg-gradient-to-r from-green-500 to-emerald-500 px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-lg shadow-green-500/50 animate-pulse">
                             FREE
                         </div>
                     )}
+
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                        <div className="flex items-center gap-2 text-white text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            View Details
+                            <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-purple-400 transition-colors line-clamp-1">
+                <div className="p-5 flex flex-col flex-grow relative z-10">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300 line-clamp-1">
                         {asset.title}
                     </h3>
-                    <p className="text-sm text-gray-500 mb-4">{asset.author}</p>
 
-                    <div className="mt-auto flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-1 text-yellow-400">
-                            <FaStar />
-                            <span className="font-medium text-gray-300">{asset.rating}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                        <div className="w-6 h-6 rounded-full gradient-bg-secondary flex items-center justify-center text-white text-xs font-bold">
+                            {asset.author.charAt(0).toUpperCase()}
                         </div>
-                        <div className="flex items-center gap-1 text-gray-400">
+                        <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">{asset.author}</p>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded-lg border border-yellow-500/20">
+                                <FaStar className="text-yellow-400 text-xs" />
+                                <span className="font-bold text-yellow-400 text-sm">{asset.rating}</span>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-gray-400 group-hover:text-purple-400 transition-colors">
                             <FaDownload className="text-xs" />
-                            <span>{asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}</span>
+                            <span className="text-sm font-medium">
+                                {asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}
+                            </span>
                         </div>
                     </div>
+
+                    {/* Price Tag */}
+                    {asset.price > 0 && (
+                        <div className="mt-3 text-center">
+                            <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg">
+                                <span className="text-lg font-bold gradient-text">${asset.price}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </Link>

@@ -42,8 +42,9 @@ export default function LoginPage() {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
-                // Redirect to home or dashboard
-                router.push('/');
+                // Redirect to browse page
+                router.push('/browse');
+                router.refresh(); // Force refresh to update auth state
             } else {
                 setError(data.message || 'Login failed');
             }

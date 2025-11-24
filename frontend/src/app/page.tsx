@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaXTwitter, FaDiscord, FaReddit } from 'react-icons/fa6';
+import { FaXTwitter, FaDiscord, FaReddit, FaPalette, FaMagnifyingGlass, FaBolt, FaImage, FaHeart, FaShieldHalved, FaPenToSquare, FaRocket, FaGamepad } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -122,37 +122,37 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: '🎨',
+                icon: FaPalette,
                 title: 'Diverse Asset Library',
                 description: 'Access thousands of 3D models, textures, sounds, and scripts for your game projects.',
                 color: 'bg-purple-500/10 text-purple-400 border-purple-500/20'
               },
               {
-                icon: '🔍',
+                icon: FaMagnifyingGlass,
                 title: 'Smart Search',
                 description: 'Find exactly what you need with AI-powered search and advanced category filtering.',
                 color: 'bg-blue-500/10 text-blue-400 border-blue-500/20'
               },
               {
-                icon: '⚡',
+                icon: FaBolt,
                 title: 'Instant Downloads',
                 description: 'Quick and secure downloads with support for external links like Drive and itch.io.',
                 color: 'bg-green-500/10 text-green-400 border-green-500/20'
               },
               {
-                icon: '🖼️',
+                icon: FaImage,
                 title: 'HD Previews',
                 description: 'See what you\'re getting with interactive 3D viewers and high-quality image galleries.',
                 color: 'bg-pink-500/10 text-pink-400 border-pink-500/20'
               },
               {
-                icon: '❤️',
+                icon: FaHeart,
                 title: 'Collections',
                 description: 'Save your favorite assets and organize them into custom project boards.',
                 color: 'bg-orange-500/10 text-orange-400 border-orange-500/20'
               },
               {
-                icon: '🛡️',
+                icon: FaShieldHalved,
                 title: 'Verified Quality',
                 description: 'All assets are manually reviewed by our team to ensure top-tier quality and security.',
                 color: 'bg-teal-500/10 text-teal-400 border-teal-500/20'
@@ -163,7 +163,7 @@ export default function Home() {
                 className="group bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.07]"
               >
                 <div className={`w-14 h-14 ${feature.color} border rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  {feature.icon}
+                  <feature.icon className="text-2xl" />
                 </div>
                 <h3 className="mb-3 text-xl font-bold text-white group-hover:text-purple-400 transition-colors">{feature.title}</h3>
                 <p className="text-gray-400 leading-relaxed">{feature.description}</p>
@@ -274,24 +274,24 @@ export default function Home() {
                 step: '01',
                 title: 'Create Account',
                 description: 'Sign up for free and choose your role—Developer or Creator.',
-                icon: '📝'
+                icon: FaPenToSquare
               },
               {
                 step: '02',
                 title: 'Browse or Upload',
                 description: 'Explore thousands of assets or share your own creations with the community.',
-                icon: '🚀'
+                icon: FaRocket
               },
               {
                 step: '03',
                 title: 'Download & Create',
                 description: 'Get instant access to assets and start building amazing games.',
-                icon: '🎮'
+                icon: FaGamepad
               }
             ].map((step, index) => (
               <div key={index} className="text-center relative group z-10">
                 <div className="w-24 h-24 mx-auto mb-8 bg-[#0a0a0a] rounded-full border-4 border-purple-500/20 flex items-center justify-center text-4xl shadow-lg shadow-purple-500/10 group-hover:scale-110 group-hover:border-purple-500 transition-all duration-300">
-                  {step.icon}
+                  <step.icon className="text-3xl text-purple-400" />
                 </div>
                 <div className="text-sm font-bold text-purple-400 mb-3 tracking-wider">STEP {step.step}</div>
                 <h3 className="mb-4 text-2xl font-bold text-white">{step.title}</h3>
