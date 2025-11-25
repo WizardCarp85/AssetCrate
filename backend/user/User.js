@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   },
     role: {
         type: String,
-        enum: ['developer', 'creator'],
+        enum: ['developer', 'creator', 'admin'],
         required: true
     },
     bio: {
@@ -48,7 +48,21 @@ const userSchema = new mongoose.Schema({
         twitter: { type: String, default: '' },
         discord: { type: String, default: '' },
         github: { type: String, default: '' }
-    }
+    },
+    favorites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Asset'
+    }],
+    downloads: [{
+        assetId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Asset'
+        },
+        downloadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 }, {
     timestamps: true
 });

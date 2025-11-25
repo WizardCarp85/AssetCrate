@@ -19,10 +19,12 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 const authRoutes = require('./user/authRoutes');
 const profileRoutes = require('./user/profileRoutes');
+const dashboardRoutes = require('./user/dashboardRoutes');
 const assetRoutes = require('./assets/assetRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/assets', assetRoutes);
 
 // Health check endpoint

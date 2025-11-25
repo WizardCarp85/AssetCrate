@@ -1,9 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { getAssets, getAssetById, seedAssets } = require('./assetController');
+const { 
+  getAssets, 
+  getAssetById, 
+  uploadAsset,
+  toggleFavorite,
+  recordDownload,
+  incrementViews,
+  seedAssets 
+} = require('./assetController');
+const authMiddleware = require('../user/authMiddleware');
 
+// Public routes
 router.get('/', getAssets);
-router.get('/seed', seedAssets);
 router.get('/:id', getAssetById);
+router.post('/seed', seedAssets);
+router.post('/:id/view', incrementViews);
+
+// Protected routes
+router.post('/', authMiddleware, uploadAsset);
+router.post('/:id/favorite', authMiddleware, toggleFavorite);
+router.post('/:id/download', authMiddleware, recordDownload);
 
 module.exports = router;

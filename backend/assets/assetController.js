@@ -1,4 +1,5 @@
 const Asset = require('./Asset');
+const User = require('../user/User');
 
 // @desc    Get all assets with filtering, sorting, and pagination
 // @route   GET /api/assets
@@ -24,6 +25,9 @@ exports.getAssets = async (req, res) => {
 
     // Finding resource
     let mongoQuery = JSON.parse(queryStr);
+
+    // Only show approved assets for public browse
+    mongoQuery.approvalStatus = 'approved';
 
     // Search functionality
     if (req.query.search) {
@@ -109,6 +113,140 @@ exports.getAssetById = async (req, res) => {
   }
 };
 
+// @desc    Upload new asset
+// @route   POST /api/assets
+// @access  Private (Creator only)
+exports.uploadAsset = async (req, res) => {
+  try {
+    const { title, description, category, price, imageUrl, fileUrl, tags } = req.body;
+    const userId = req.user.userId;
+
+    // Get user to get username for author field
+    const user = await User.findById(userId);
+
+    const asset = await Asset.create({
+      title,
+      description,
+      category,
+      price: price || 0,
+      imageUrl,
+      fileUrl,
+      tags: tags || [],
+      author: user.username,
+      creatorId: userId,
+      approvalStatus: 'pending'
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Asset uploaded successfully. Pending admin approval.',
+      data: asset
+    });
+  } catch (err) {
+    console.error('Upload asset error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+// @desc    Toggle favorite
+// @route   POST /api/assets/:id/favorite
+// @access  Private
+exports.toggleFavorite = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+    const asset = await Asset.findById(assetId);
+
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    const isFavorited = user.favorites.includes(assetId);
+
+    if (isFavorited) {
+      // Remove from favorites
+      user.favorites = user.favorites.filter(id => id.toString() !== assetId);
+    } else {
+      // Add to favorites
+      user.favorites.push(assetId);
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      isFavorited: !isFavorited,
+      message: isFavorited ? 'Removed from favorites' : 'Added to favorites'
+    });
+  } catch (err) {
+    console.error('Toggle favorite error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+// @desc    Record download
+// @route   POST /api/assets/:id/download
+// @access  Private
+exports.recordDownload = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+    const userId = req.user.userId;
+
+    const asset = await Asset.findById(assetId);
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    // Increment download count
+    asset.downloads += 1;
+    await asset.save();
+
+    // Add to user's download history
+    const user = await User.findById(userId);
+    user.downloads.push({
+      assetId,
+      downloadedAt: new Date()
+    });
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Download recorded',
+      downloads: asset.downloads
+    });
+  } catch (err) {
+    console.error('Record download error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+// @desc    Increment views
+// @route   POST /api/assets/:id/view
+// @access  Public
+exports.incrementViews = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+
+    const asset = await Asset.findById(assetId);
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    asset.views += 1;
+    await asset.save();
+
+    res.json({
+      success: true,
+      views: asset.views
+    });
+  } catch (err) {
+    console.error('Increment views error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
 // @desc    Seed assets
 // @route   POST /api/assets/seed
 // @access  Public (for dev)
@@ -126,7 +264,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1250,
         imageUrl: "https://images.unsplash.com/photo-1612287230217-969b698c8d13?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["scifi", "weapon", "gun", "3d"]
+        tags: ["scifi", "weapon", "gun", "3d"],
+        approvalStatus: "approved"
       },
       {
         title: "Low Poly Nature Kit",
@@ -137,7 +276,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 3400,
         imageUrl: "https://images.unsplash.com/photo-1448375240586-dfd8f3793371?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["nature", "lowpoly", "environment"]
+        tags: ["nature", "lowpoly", "environment"],
+        approvalStatus: "approved"
       },
       {
         title: "Cyberpunk City Textures",
@@ -148,7 +288,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 890,
         imageUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["cyberpunk", "texture", "city"]
+        tags: ["cyberpunk", "texture", "city"],
+        approvalStatus: "approved"
       },
       {
         title: "RPG Fantasy UI Kit",
@@ -159,7 +300,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 2100,
         imageUrl: "https://images.unsplash.com/photo-1614726365723-49cfae927832?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["ui", "rpg", "fantasy", "interface"]
+        tags: ["ui", "rpg", "fantasy", "interface"],
+        approvalStatus: "approved"
       },
       {
         title: "8-Bit Retro Sound Effects",
@@ -170,7 +312,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 5600,
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["sound", "sfx", "retro", "8bit"]
+        tags: ["sound", "sfx", "retro", "8bit"],
+        approvalStatus: "approved"
       },
       {
         title: "Ultimate FPS Controller",
@@ -181,7 +324,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1500,
         imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["script", "fps", "controller", "code"]
+        tags: ["script", "fps", "controller", "code"],
+        approvalStatus: "approved"
       },
       {
         title: "Magic Spells VFX",
@@ -192,7 +336,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 980,
         imageUrl: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["vfx", "magic", "particles"]
+        tags: ["vfx", "magic", "particles"],
+        approvalStatus: "approved"
       },
       {
         title: "Dungeon Ambient Music",
@@ -203,7 +348,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1200,
         imageUrl: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["music", "ambient", "dungeon"]
+        tags: ["music", "ambient", "dungeon"],
+        approvalStatus: "approved"
       },
       {
         title: "Modern Apartment Interior",
@@ -214,7 +360,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 850,
         imageUrl: "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["interior", "furniture", "modern"]
+        tags: ["interior", "furniture", "modern"],
+        approvalStatus: "approved"
       },
       {
         title: "Realistic Water Shader",
@@ -225,7 +372,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 2300,
         imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["shader", "water", "vfx"]
+        tags: ["shader", "water", "vfx"],
+        approvalStatus: "approved"
       },
       {
         title: "Space Station Environment",
@@ -236,7 +384,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1100,
         imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["scifi", "space", "environment"]
+        tags: ["scifi", "space", "environment"],
+        approvalStatus: "approved"
       },
       {
         title: "Horror Sound Pack",
@@ -247,7 +396,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 3100,
         imageUrl: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["horror", "sound", "scary"]
+        tags: ["horror", "sound", "scary"],
+        approvalStatus: "approved"
       },
       {
         title: "Inventory System",
@@ -258,7 +408,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1800,
         imageUrl: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["inventory", "system", "script"]
+        tags: ["inventory", "system", "script"],
+        approvalStatus: "approved"
       },
       {
         title: "Pixel Art Characters",
@@ -269,7 +420,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 4200,
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["pixelart", "2d", "character"]
+        tags: ["pixelart", "2d", "character"],
+        approvalStatus: "approved"
       },
       {
         title: "Orchestral Epic Music",
@@ -280,7 +432,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 1600,
         imageUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384ebd?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["music", "orchestral", "epic"]
+        tags: ["music", "orchestral", "epic"],
+        approvalStatus: "approved"
       },
       {
         title: "Vehicle Physics Controller",
@@ -291,7 +444,8 @@ exports.seedAssets = async (req, res) => {
         downloads: 950,
         imageUrl: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["vehicle", "physics", "racing"]
+        tags: ["vehicle", "physics", "racing"],
+        approvalStatus: "approved"
       }
     ];
 
