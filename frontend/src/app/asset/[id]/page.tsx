@@ -20,7 +20,7 @@ export default function AssetDetailsPage() {
 
     const fetchAsset = async () => {
         try {
-            const res = await fetch(`http://localhost:5001/api/assets/${params.id}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}`);
             const data = await res.json();
             if (data.success) {
                 setAsset(data.data);

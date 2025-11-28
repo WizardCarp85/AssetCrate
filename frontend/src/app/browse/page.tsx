@@ -34,7 +34,7 @@ export default function BrowsePage() {
             if (filters.category && filters.category !== 'All') query += `&category=${filters.category}`;
             if (filters.search) query += `&search=${filters.search}`;
 
-            const res = await fetch(`http://localhost:5001/api/assets${query}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets${query}`);
             const data = await res.json();
 
             if (data.success) {

@@ -32,7 +32,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
             const token = localStorage.getItem('token');
             const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-            const res = await fetch('http://localhost:5001/api/assets', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -18,7 +18,7 @@ export default function CreatorDashboard() {
     const fetchDashboardData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5001/api/dashboard/creator', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/creator`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -43,7 +43,7 @@ export default function CreatorDashboard() {
         setDeleting(assetId);
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:5001/api/assets/${assetId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${assetId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

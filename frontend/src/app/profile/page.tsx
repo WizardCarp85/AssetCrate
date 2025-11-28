@@ -40,7 +40,7 @@ export default function ProfilePage() {
 
     const fetchProfile = async (userId: string) => {
         try {
-            const res = await fetch(`http://localhost:5001/api/profile/${userId}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile/${userId}`);
             const data = await res.json();
 
             if (data.success) {
@@ -62,7 +62,7 @@ export default function ProfilePage() {
     const handleUpdate = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5001/api/profile', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

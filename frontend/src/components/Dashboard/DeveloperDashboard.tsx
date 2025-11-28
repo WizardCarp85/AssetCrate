@@ -15,7 +15,7 @@ export default function DeveloperDashboard() {
     const fetchDashboardData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5001/api/dashboard/developer', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/developer`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

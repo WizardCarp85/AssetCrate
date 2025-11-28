@@ -18,7 +18,7 @@ export default function AdminDashboard() {
     const fetchDashboardData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5001/api/dashboard/admin', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/admin`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
         setApproving(assetId);
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:5001/api/dashboard/admin/asset/${assetId}/approve`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/admin/asset/${assetId}/approve`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
