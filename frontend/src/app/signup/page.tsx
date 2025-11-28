@@ -67,19 +67,19 @@ export default function SignupPage() {
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             {/* Left Side - Branding */}
-            <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12 xl:pr-8">
+            <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-8 lg:p-12 xl:pr-8">
                 <div className="max-w-lg relative z-10">
                     <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
-                        <div className="w-14 h-14 gradient-bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-all duration-300">
-                            <span className="text-white font-bold text-3xl">A</span>
+                        <div className="w-12 sm:w-14 h-12 sm:h-14 gradient-bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-all duration-300">
+                            <span className="text-white font-bold text-2xl sm:text-3xl">A</span>
                         </div>
-                        <span className="text-3xl font-bold text-white tracking-tight">AssetCrate</span>
+                        <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">AssetCrate</span>
                     </Link>
 
-                    <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
+                    <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
                         Join thousands of creators
                     </h1>
-                    <p className="text-xl text-gray-400 leading-relaxed mb-8">
+                    <p className="text-lg sm:text-xl text-gray-400 leading-relaxed mb-8">
                         Start building amazing games with premium assets or share your creations with the community.
                     </p>
 
@@ -108,9 +108,9 @@ export default function SignupPage() {
                         <span className="text-2xl font-bold text-white tracking-tight">AssetCrate</span>
                     </Link>
 
-                    <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8 sm:p-10 shadow-2xl">
-                        <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-                        <p className="text-gray-400 mb-8">
+                    <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 sm:p-8 lg:p-10 shadow-2xl">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Create Account</h2>
+                        <p className="text-sm sm:text-base text-gray-400 mb-8">
                             Already have an account?{' '}
                             <Link href="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
                                 Sign in
@@ -140,7 +140,7 @@ export default function SignupPage() {
                                         required
                                         value={formData.username}
                                         onChange={handleChange}
-                                        className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                                        className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all text-sm sm:text-base"
                                         placeholder="johndoe"
                                     />
                                 </div>
@@ -161,7 +161,7 @@ export default function SignupPage() {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                                        className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all text-sm sm:text-base"
                                         placeholder="you@example.com"
                                     />
                                 </div>
@@ -182,7 +182,7 @@ export default function SignupPage() {
                                         required
                                         value={formData.password}
                                         onChange={handleChange}
-                                        className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                                        className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-black/20 border border-white/10 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all text-sm sm:text-base"
                                         placeholder="••••••••"
                                     />
                                 </div>

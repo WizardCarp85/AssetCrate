@@ -19,6 +19,7 @@ export default function BrowsePage() {
         sort: searchParams.get('sort') || '-createdAt',
         search: searchParams.get('search') || ''
     });
+    const [showFilters, setShowFilters] = useState(false);
 
     const categories = ['All', '3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI'];
 
@@ -68,7 +69,7 @@ export default function BrowsePage() {
             {/* Hero Section */}
             <section className="pt-32 pb-16 relative">
                 <div className="container-custom relative z-10">
-                    <div className="max-w-4xl mx-auto text-center mb-12 animate-fade-in">
+                    <div className="max-w-4xl mx-auto text-center mb-12 animate-fade-in px-4">
                         {/* Badge */}
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-sm font-semibold mb-6 backdrop-blur-sm">
                             <FaFire className="text-orange-400 animate-pulse" />
@@ -76,10 +77,10 @@ export default function BrowsePage() {
                         </div>
 
                         {/* Title */}
-                        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                             Discover Premium <span className="gradient-text">Game Assets</span>
                         </h1>
-                        <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                        <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
                             Browse our curated collection of high-quality assets. From 3D models to sound effects, find everything you need.
                         </p>
 
@@ -88,15 +89,15 @@ export default function BrowsePage() {
                             <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                             <div className="relative bg-[#0a0a0a] rounded-2xl p-[2px] shadow-2xl">
                                 <div className="bg-[#111] rounded-2xl flex items-center overflow-hidden">
-                                    <div className="pl-6 pr-4 text-gray-500 group-hover:text-cyan-400 transition-colors">
-                                        <FaMagnifyingGlass className="text-xl" />
+                                    <div className="pl-4 sm:pl-6 pr-3 sm:pr-4 text-gray-500 group-hover:text-cyan-400 transition-colors">
+                                        <FaMagnifyingGlass className="text-lg sm:text-xl" />
                                     </div>
                                     <input
                                         type="text"
-                                        placeholder="Search for 3D models, textures, sounds..."
+                                        placeholder="Search assets..."
                                         value={filters.search}
                                         onChange={(e) => handleFilterChange('search', e.target.value)}
-                                        className="flex-1 bg-transparent py-5 pr-6 text-white placeholder-gray-500 focus:outline-none text-lg"
+                                        className="flex-1 bg-transparent py-4 sm:py-5 pr-4 sm:pr-6 text-white placeholder-gray-500 focus:outline-none text-base sm:text-lg"
                                     />
                                     {filters.search && (
                                         <button
@@ -132,9 +133,20 @@ export default function BrowsePage() {
             {/* Main Content */}
             <section className="pb-20">
                 <div className="container-custom relative z-10">
+                    {/* Mobile Filter Toggle Button */}
+                    <div className="lg:hidden mb-6">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-semibold hover:bg-white/10 transition-all"
+                        >
+                            <FaFilter />
+                            {showFilters ? 'Hide Filters' : 'Show Filters'}
+                        </button>
+                    </div>
+
                     <div className="flex flex-col lg:flex-row gap-8">
                         {/* Sidebar Filters - Improved */}
-                        <aside className="w-full lg:w-72 flex-shrink-0 space-y-6 animate-slide-up">
+                        <aside className={`w-full lg:w-72 flex-shrink-0 space-y-6 animate-slide-up ${showFilters ? 'block' : 'hidden lg:block'}`}>
                             {/* Categories */}
                             <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
                                 <h3 className="text-white font-bold mb-5 flex items-center gap-2 text-lg">
@@ -206,10 +218,10 @@ export default function BrowsePage() {
                             {/* Results Header */}
                             <div className="flex items-center justify-between mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-white">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-white">
                                         {filters.category && filters.category !== 'All' ? filters.category : 'All Assets'}
                                     </h2>
-                                    <p className="text-sm text-gray-500 mt-1">
+                                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
                                         {loading ? 'Loading...' : `${assets.length} results • Page ${currentPage}`}
                                     </p>
                                 </div>
@@ -225,7 +237,7 @@ export default function BrowsePage() {
                                 </div>
                             ) : assets.length > 0 ? (
                                 <>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 animate-fade-in">
                                         {assets.map((asset: any) => (
                                             <AssetCard key={asset._id} asset={asset} />
                                         ))}

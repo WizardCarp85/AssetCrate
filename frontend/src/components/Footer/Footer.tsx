@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="bg-black text-gray-400 py-12 border-t border-white/10">
             <div className="container-custom">
-                <div className="grid md:grid-cols-4 gap-8 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-8 h-8 gradient-bg-primary rounded-lg flex items-center justify-center">
@@ -39,7 +39,7 @@ export default function Footer() {
 
                     <div>
                         <h4 className="text-white font-semibold mb-4">Connect</h4>
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap gap-3">
                             <a
                                 href="#twitter"
                                 className="w-10 h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-cyan-600 hover:border-cyan-600 transition-all"

@@ -8,7 +8,8 @@ import UploadModal from '@/components/UploadModal/UploadModal';
 export default function CreatorDashboard() {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [showUploadModal, setShowUploadModal] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [deleting, setDeleting] = useState<string | null>(null);
 
     useEffect(() => {
         fetchDashboardData();
@@ -31,6 +32,36 @@ export default function CreatorDashboard() {
             console.error('Error fetching dashboard:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDeleteAsset = async (assetId: string) => {
+        if (!confirm('Are you sure you want to delete this asset? This action cannot be undone.')) {
+            return;
+        }
+
+        setDeleting(assetId);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:5001/api/assets/${assetId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                // Refresh dashboard data
+                fetchDashboardData();
+            } else {
+                alert(result.message || 'Failed to delete asset');
+            }
+        } catch (error) {
+            console.error('Error deleting asset:', error);
+            alert('Failed to delete asset');
+        } finally {
+            setDeleting(null);
         }
     };
 
@@ -64,14 +95,14 @@ export default function CreatorDashboard() {
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
                 <div className="container-custom relative z-10">
-                    <div className="flex items-center justify-between mb-12">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-12">
                         <div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Creator Dashboard</h1>
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">Creator Dashboard</h1>
                             <p className="text-gray-400">Manage your uploaded assets and track performance</p>
                         </div>
                         <button
-                            onClick={() => setShowUploadModal(true)}
-                            className="px-6 py-3 gradient-bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/30 flex items-center gap-2"
+                            onClick={() => setIsUploadModalOpen(true)}
+                            className="w-full sm:w-auto px-6 py-3 gradient-bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2"
                         >
                             <FaUpload />
                             Upload Asset
@@ -79,7 +110,7 @@ export default function CreatorDashboard() {
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
                         <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
                                 <div className="w-10 h-10 rounded-lg gradient-bg-primary flex items-center justify-center">
@@ -129,21 +160,21 @@ export default function CreatorDashboard() {
                                 {data.assets.map((asset: any) => (
                                     <div
                                         key={asset._id}
-                                        className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 hover:border-cyan-500/50 transition-all duration-300"
+                                        className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/50 transition-all duration-300"
                                     >
-                                        <div className="flex items-start gap-6">
-                                            <div className="w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
+                                        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex-grow">
-                                                <div className="flex items-start justify-between mb-3">
+                                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                                     <div>
-                                                        <h3 className="text-xl font-bold text-white mb-2">{asset.title}</h3>
+                                                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{asset.title}</h3>
                                                         <p className="text-gray-400 text-sm line-clamp-2">{asset.description}</p>
                                                     </div>
                                                     {getStatusBadge(asset.approvalStatus)}
                                                 </div>
-                                                <div className="flex items-center gap-3 text-sm text-gray-400 mb-3">
+                                                <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-3">
                                                     <span className="flex items-center gap-1">
                                                         <FaDownload className="text-cyan-400" />
                                                         {asset.downloads} downloads
@@ -161,16 +192,25 @@ export default function CreatorDashboard() {
                                                         <p className="text-sm text-red-300">{asset.rejectionReason}</p>
                                                     </div>
                                                 )}
-                                                {asset.approvalStatus === 'approved' && (
-                                                    <div className="flex gap-3">
+
+                                                {/* Action Buttons */}
+                                                <div className="flex flex-wrap gap-2 sm:gap-3 mt-4">
+                                                    {asset.approvalStatus === 'approved' && (
                                                         <Link
                                                             href={`/asset/${asset._id}`}
-                                                            className="px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg hover:bg-white/10 transition-colors text-sm font-semibold"
+                                                            className="px-3 sm:px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg hover:bg-white/10 transition-colors text-xs sm:text-sm font-semibold"
                                                         >
                                                             View
                                                         </Link>
-                                                    </div>
-                                                )}
+                                                    )}
+                                                    <button
+                                                        onClick={() => handleDeleteAsset(asset._id)}
+                                                        disabled={deleting === asset._id}
+                                                        className="px-3 sm:px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-xs sm:text-sm font-semibold disabled:opacity-50"
+                                                    >
+                                                        {deleting === asset._id ? 'Deleting...' : 'Delete'}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -185,7 +225,7 @@ export default function CreatorDashboard() {
                             <h3 className="text-2xl font-bold text-white mb-4">No Assets Yet</h3>
                             <p className="text-gray-400 mb-8">Upload your first asset to start sharing with the community!</p>
                             <button
-                                onClick={() => setShowUploadModal(true)}
+                                onClick={() => setIsUploadModalOpen(true)}
                                 className="inline-block px-8 py-4 gradient-bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/30"
                             >
                                 Upload Asset
@@ -196,8 +236,8 @@ export default function CreatorDashboard() {
             </div>
 
             <UploadModal
-                isOpen={showUploadModal}
-                onClose={() => setShowUploadModal(false)}
+                isOpen={isUploadModalOpen}
+                onClose={() => setIsUploadModalOpen(false)}
                 onSuccess={fetchDashboardData}
             />
         </>

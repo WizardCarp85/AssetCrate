@@ -53,8 +53,8 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
 
         <div className="container-custom relative z-10">
-          <div className="max-w-5xl mx-auto text-center animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-sm font-semibold mb-8 animate-slide-up backdrop-blur-sm">
+          <div className="max-w-5xl mx-auto text-center animate-fade-in px-4">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-xs sm:text-sm font-semibold mb-6 sm:mb-8 animate-slide-up backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
@@ -62,22 +62,22 @@ export default function Home() {
               The #1 Marketplace for Game Assets
             </div>
 
-            <h1 className="mb-8 text-6xl md:text-7xl tracking-tight text-white">
+            <h1 className="mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white">
               Build Epic Games with <br />
               <span className="gradient-text font-extrabold drop-shadow-lg">Premium Assets</span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light px-4">
               Discover thousands of high-quality 3D models, textures, sounds, and scripts.
               Join a community of <span className="font-semibold text-white">10,000+</span> creators building the future of gaming.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center mb-16 px-4">
               <button
                 onClick={handleBrowseAssets}
-                className="group relative px-8 py-4 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-lg hover:shadow-cyan-500/25 hover:-translate-y-1 overflow-hidden"
+                className="group relative w-full sm:w-auto px-8 py-4 text-base sm:text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-lg hover:shadow-cyan-500/25 hover:-translate-y-1 overflow-hidden"
               >
-                <span className="relative z-10 flex items-center gap-2">
+                <span className="relative z-10 flex items-center justify-center gap-2">
                   Browse Assets
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </span>
@@ -85,14 +85,14 @@ export default function Home() {
               </button>
               <Link
                 href={isAuthenticated ? '/dashboard' : '/signup'}
-                className="px-8 py-4 text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1"
+                className="w-full sm:w-auto px-8 py-4 text-base sm:text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 text-center"
               >
                 {isAuthenticated ? 'Go to Dashboard' : 'Start Creating'}
               </Link>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-12 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 border-t border-white/10 pt-12 max-w-4xl mx-auto px-4">
               {[
                 { label: 'Active Users', value: '10K+' },
                 { label: 'Assets', value: '50K+' },
@@ -100,8 +100,8 @@ export default function Home() {
                 { label: 'Creators', value: '500+' },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-sm text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-xs sm:text-sm text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -113,8 +113,8 @@ export default function Home() {
       <section id="features" className="py-32 bg-[#0a0a0a] relative">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <h2 className="mb-6 text-4xl md:text-5xl text-white">Everything You Need</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            <h2 className="mb-6 text-3xl sm:text-4xl md:text-5xl text-white">Everything You Need</h2>
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
               A complete platform designed to streamline your game development workflow
             </p>
           </div>
@@ -179,8 +179,8 @@ export default function Home() {
 
         <div className="container-custom relative z-10">
           <div className="text-center mb-20">
-            <h2 className="mb-6 text-4xl md:text-5xl text-white">Choose Your Path</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <h2 className="mb-6 text-3xl sm:text-4xl md:text-5xl text-white px-4">Choose Your Path</h2>
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
               Whether you're building games or creating assets, we have the perfect tools for you
             </p>
           </div>
@@ -259,8 +259,8 @@ export default function Home() {
       <section id="how-it-works" className="py-32 bg-[#0a0a0a]">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <h2 className="mb-6 text-4xl md:text-5xl text-white">How It Works</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <h2 className="mb-6 text-3xl sm:text-4xl md:text-5xl text-white px-4">How It Works</h2>
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
               Get started in three simple steps
             </p>
           </div>
@@ -309,20 +309,20 @@ export default function Home() {
 
         <div className="container-custom relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="mb-8 text-4xl md:text-6xl text-white font-bold">Ready to Start Building?</h2>
-            <p className="text-xl md:text-2xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
+            <h2 className="mb-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-bold px-4">Ready to Start Building?</h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto px-4">
               Join thousands of game developers and creators sharing amazing assets today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-4">
               <Link
                 href={isAuthenticated ? '/dashboard' : '/signup'}
-                className="px-12 py-5 text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1"
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg font-bold text-white gradient-bg-primary rounded-2xl hover:opacity-90 transition-all shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1 text-center"
               >
                 {isAuthenticated ? 'Go to Dashboard' : 'Create Free Account'}
               </Link>
               <Link
                 href="/browse"
-                className="px-12 py-5 text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1"
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg font-bold text-white border border-white/20 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 text-center"
               >
                 Explore Assets
               </Link>

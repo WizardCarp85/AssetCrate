@@ -148,6 +148,55 @@ exports.uploadAsset = async (req, res) => {
   }
 };
 
+// @desc    Delete asset (Creator can delete their own, Admin can delete any)
+// @route   DELETE /api/assets/:id
+// @access  Private
+exports.deleteAsset = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+
+    const asset = await Asset.findById(assetId);
+
+    if (!asset) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asset not found'
+      });
+    }
+
+    // Check if user is the creator or an admin
+    // If asset has no creatorId (seeded assets), only admin can delete
+    if (asset.creatorId) {
+      if (asset.creatorId.toString() !== userId && userRole !== 'admin') {
+        return res.status(403).json({
+          success: false,
+          message: 'Not authorized to delete this asset'
+        });
+      }
+    } else {
+      // No creatorId means it's a seeded asset, only admin can delete
+      if (userRole !== 'admin') {
+        return res.status(403).json({
+          success: false,
+          message: 'Only admins can delete seeded assets'
+        });
+      }
+    }
+
+    await Asset.findByIdAndDelete(assetId);
+
+    res.json({
+      success: true,
+      message: 'Asset deleted successfully'
+    });
+  } catch (err) {
+    console.error('Delete asset error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
 // @desc    Toggle favorite
 // @route   POST /api/assets/:id/favorite
 // @access  Private
