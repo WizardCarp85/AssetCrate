@@ -10,8 +10,13 @@ const createAdminUser = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB connected');
 
+    // Get admin credentials from environment variables or use defaults
+    const adminUsername = process.env.ADMIN_USERNAME || 'wizard';
+    const adminEmail = process.env.ADMIN_EMAIL || 'wizard@wizard.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'wizardwizard';
+
     // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: 'wizard@wizard.com' });
+    const existingAdmin = await User.findOne({ email: adminEmail });
     
     if (existingAdmin) {
       console.log('Admin user already exists!');
@@ -23,12 +28,12 @@ const createAdminUser = async () => {
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('wizardwizard', salt);
+    const hashedPassword = await bcrypt.hash(adminPassword, salt);
 
     // Create admin user
     const adminUser = new User({
-      username: 'wizard',
-      email: 'wizard@wizard.com',
+      username: adminUsername,
+      email: adminEmail,
       password: hashedPassword,
       role: 'admin'
     });
@@ -36,9 +41,9 @@ const createAdminUser = async () => {
     await adminUser.save();
 
     console.log('✅ Admin user created successfully!');
-    console.log('Username: wizard');
-    console.log('Email: wizard@wizard.com');
-    console.log('Password: wizardwizard');
+    console.log('Username:', adminUsername);
+    console.log('Email:', adminEmail);
+    console.log('Password:', adminPassword);
     console.log('Role: admin');
     
     process.exit(0);
