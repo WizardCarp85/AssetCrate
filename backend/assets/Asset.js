@@ -62,6 +62,36 @@ const assetSchema = new mongoose.Schema({
     default: '#'
   },
   tags: [String],
+  comments: [{
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    username: {
+      type: String,
+      required: true
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    text: {
+      type: String,
+      required: true,
+      maxlength: [500, 'Comment cannot be more than 500 characters']
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   createdAt: {
     type: Date,
     default: Date.now

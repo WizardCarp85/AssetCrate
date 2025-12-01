@@ -510,3 +510,134 @@ exports.seedAssets = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
+
+// @desc    Add comment to asset
+// @route   POST /api/assets/:id/comments
+// @access  Private
+exports.addComment = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+    const userId = req.user.userId;
+    const { text, rating } = req.body;
+
+    // Validate input
+    if (!text || !rating) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide both text and rating'
+      });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rating must be between 1 and 5'
+      });
+    }
+
+    // Get user info
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Get asset
+    const asset = await Asset.findById(assetId);
+    if (!asset) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asset not found'
+      });
+    }
+
+    // Create comment object
+    const comment = {
+      userId: userId,
+      username: user.username,
+      avatar: user.avatar || '',
+      text: text,
+      rating: rating,
+      createdAt: new Date()
+    };
+
+    // Add comment to asset
+    asset.comments.push(comment);
+
+    // Update asset's average rating
+    const totalRating = asset.comments.reduce((sum, c) => sum + c.rating, 0);
+    asset.rating = totalRating / asset.comments.length;
+
+    await asset.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Comment added successfully',
+      data: comment
+    });
+  } catch (err) {
+    console.error('Add comment error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+// @desc    Delete comment from asset
+// @route   DELETE /api/assets/:id/comments/:commentId
+// @access  Private (own comment) or Admin
+exports.deleteComment = async (req, res) => {
+  try {
+    const { id: assetId, commentId } = req.params;
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+
+    // Get asset
+    const asset = await Asset.findById(assetId);
+    if (!asset) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asset not found'
+      });
+    }
+
+    // Find comment
+    const comment = asset.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Comment not found'
+      });
+    }
+
+    // Check authorization (user can delete own comment, admin can delete any)
+    if (comment.userId.toString() !== userId && userRole !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized to delete this comment'
+      });
+    }
+
+    // Remove comment
+    comment.deleteOne();
+
+    // Recalculate average rating
+    if (asset.comments.length > 0) {
+      const totalRating = asset.comments.reduce((sum, c) => sum + c.rating, 0);
+      asset.rating = totalRating / asset.comments.length;
+    } else {
+      asset.rating = 5; // Default rating if no comments
+    }
+
+    await asset.save();
+
+    res.json({
+      success: true,
+      message: 'Comment deleted successfully'
+    });
+  } catch (err) {
+    console.error('Delete comment error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+

@@ -8,7 +8,9 @@ const {
   recordDownload,
   incrementViews,
   seedAssets,
-  deleteAsset
+  deleteAsset,
+  addComment,
+  deleteComment
 } = require('./assetController');
 const authMiddleware = require('../user/authMiddleware');
 
@@ -23,5 +25,7 @@ router.post('/', authMiddleware, uploadAsset);
 router.delete('/:id', authMiddleware, deleteAsset);
 router.post('/:id/favorite', authMiddleware, toggleFavorite);
 router.post('/:id/download', authMiddleware, recordDownload);
+router.post('/:id/comments', authMiddleware, addComment);
+router.delete('/:id/comments/:commentId', authMiddleware, deleteComment);
 
 module.exports = router;

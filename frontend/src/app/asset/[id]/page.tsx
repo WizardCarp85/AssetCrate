@@ -4,17 +4,26 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaPalette, FaFileLines } from 'react-icons/fa6';
+import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaPalette, FaFileLines, FaComments, FaTrash, FaPaperPlane, FaUser } from 'react-icons/fa6';
 
 export default function AssetDetailsPage() {
     const params = useParams();
     const [asset, setAsset] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [liked, setLiked] = useState(false);
+    const [commentText, setCommentText] = useState('');
+    const [commentRating, setCommentRating] = useState(5);
+    const [submittingComment, setSubmittingComment] = useState(false);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         if (params.id) {
             fetchAsset();
+        }
+        // Check if user is logged in
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            setUser(JSON.parse(userStr));
         }
     }, [params.id]);
 
@@ -42,6 +51,70 @@ export default function AssetDetailsPage() {
         } else {
             navigator.clipboard.writeText(window.location.href);
             alert('Link copied to clipboard!');
+        }
+    };
+
+    const handleAddComment = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user) {
+            alert('Please login to add a comment');
+            return;
+        }
+        if (!commentText.trim()) {
+            alert('Please enter a comment');
+            return;
+        }
+
+        setSubmittingComment(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    text: commentText,
+                    rating: commentRating
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setCommentText('');
+                setCommentRating(5);
+                fetchAsset(); // Refresh to show new comment
+            } else {
+                alert(data.message || 'Failed to add comment');
+            }
+        } catch (err) {
+            console.error('Error adding comment:', err);
+            alert('Failed to add comment');
+        } finally {
+            setSubmittingComment(false);
+        }
+    };
+
+    const handleDeleteComment = async (commentId: string) => {
+        if (!confirm('Are you sure you want to delete this comment?')) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAsset(); // Refresh to remove deleted comment
+            } else {
+                alert(data.message || 'Failed to delete comment');
+            }
+        } catch (err) {
+            console.error('Error deleting comment:', err);
+            alert('Failed to delete comment');
         }
     };
 
@@ -170,6 +243,137 @@ export default function AssetDetailsPage() {
                             <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 backdrop-blur-xl p-6 rounded-2xl border border-orange-500/20 text-center">
                                 <div className="text-3xl font-bold text-orange-400 mb-1">v1.0</div>
                                 <div className="text-sm text-gray-400">Version</div>
+                            </div>
+                        </div>
+
+                        {/* Comments Section */}
+                        <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-10 h-10 rounded-xl gradient-bg-secondary flex items-center justify-center">
+                                    <FaComments className="text-white text-lg" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-white">Reviews & Comments</h2>
+                                <span className="ml-auto text-sm text-gray-400">
+                                    {asset.comments?.length || 0} {asset.comments?.length === 1 ? 'review' : 'reviews'}
+                                </span>
+                            </div>
+
+                            {/* Add Comment Form */}
+                            {user ? (
+                                <form onSubmit={handleAddComment} className="mb-8 p-6 bg-white/5 rounded-xl border border-white/10">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 rounded-full gradient-bg-primary flex items-center justify-center text-white font-bold">
+                                            {user.username?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-semibold">{user.username}</div>
+                                            <div className="text-xs text-gray-500">Leave a review</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Rating Selector */}
+                                    <div className="mb-4">
+                                        <label className="block text-sm text-gray-400 mb-2">Your Rating</label>
+                                        <div className="flex gap-2">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    onClick={() => setCommentRating(star)}
+                                                    className="transition-all hover:scale-110"
+                                                >
+                                                    <FaStar
+                                                        className={`text-2xl ${star <= commentRating
+                                                                ? 'text-yellow-400 fill-current'
+                                                                : 'text-gray-600'
+                                                            }`}
+                                                    />
+                                                </button>
+                                            ))}
+                                            <span className="ml-2 text-white font-semibold">{commentRating}/5</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Comment Text */}
+                                    <textarea
+                                        value={commentText}
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                        placeholder="Share your thoughts about this asset..."
+                                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
+                                        rows={4}
+                                        maxLength={500}
+                                    />
+                                    <div className="flex items-center justify-between mt-3">
+                                        <span className="text-xs text-gray-500">{commentText.length}/500 characters</span>
+                                        <button
+                                            type="submit"
+                                            disabled={submittingComment || !commentText.trim()}
+                                            className="px-6 py-2 gradient-bg-primary text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                        >
+                                            <FaPaperPlane className="text-sm" />
+                                            {submittingComment ? 'Posting...' : 'Post Review'}
+                                        </button>
+                                    </div>
+                                </form>
+                            ) : (
+                                <div className="mb-8 p-6 bg-white/5 rounded-xl border border-white/10 text-center">
+                                    <p className="text-gray-400 mb-3">Please login to leave a review</p>
+                                    <Link
+                                        href="/login"
+                                        className="inline-block px-6 py-2 gradient-bg-primary text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                                    >
+                                        Login
+                                    </Link>
+                                </div>
+                            )}
+
+                            {/* Comments List */}
+                            <div className="space-y-4">
+                                {asset.comments && asset.comments.length > 0 ? (
+                                    asset.comments
+                                        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                                        .map((comment: any) => (
+                                            <div
+                                                key={comment._id}
+                                                className="p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+                                            >
+                                                <div className="flex items-start justify-between mb-3">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
+                                                            {comment.username?.charAt(0).toUpperCase() || 'U'}
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-white font-semibold">{comment.username}</div>
+                                                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                                <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
+                                                                <span>•</span>
+                                                                <div className="flex items-center gap-1">
+                                                                    {[...Array(comment.rating)].map((_, i) => (
+                                                                        <FaStar key={i} className="text-yellow-400 text-xs fill-current" />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {user && (user.id === comment.userId || user.role === 'admin') && (
+                                                        <button
+                                                            onClick={() => handleDeleteComment(comment._id)}
+                                                            className="text-gray-500 hover:text-red-400 transition-colors p-2"
+                                                            title="Delete comment"
+                                                        >
+                                                            <FaTrash className="text-sm" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                <p className="text-gray-300 leading-relaxed">{comment.text}</p>
+                                            </div>
+                                        ))
+                                ) : (
+                                    <div className="text-center py-12 text-gray-500">
+                                        <FaComments className="text-5xl mx-auto mb-3 opacity-30" />
+                                        <p>No reviews yet. Be the first to review this asset!</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
