@@ -1,6 +1,5 @@
 const User = require('./User');
 
-// Get user profile
 exports.getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
@@ -25,13 +24,11 @@ exports.getProfile = async (req, res) => {
     }
 };
 
-// Update user profile
 exports.updateProfile = async (req, res) => {
     try {
         const { bio, location, website, avatar, socialLinks } = req.body;
-        const userId = req.user.userId; // From auth middleware
+        const userId = req.user.userId;
 
-        // Build update object
         const updateData = {};
         if (bio !== undefined) updateData.bio = bio;
         if (location !== undefined) updateData.location = location;

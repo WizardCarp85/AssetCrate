@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaPalette, FaFileLines, FaComments, FaTrash, FaPaperPlane, FaUser } from 'react-icons/fa6';
+import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaFileLines, FaComments, FaTrash, FaPaperPlane} from 'react-icons/fa6';
 
 export default function AssetDetailsPage() {
     const params = useParams();
@@ -21,7 +20,7 @@ export default function AssetDetailsPage() {
             fetchAsset();
             incrementViews();
         }
-        // Check if user is logged in
+
         const userStr = localStorage.getItem('user');
         if (userStr) {
             setUser(JSON.parse(userStr));
@@ -55,17 +54,10 @@ export default function AssetDetailsPage() {
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault();
 
-        // Open file immediately to prevent popup blocker issues if possible, 
-        // but we need to record download first or in parallel.
-        // Best practice: Open window first, then record.
         window.open(asset.fileUrl, '_blank');
 
         try {
             const token = localStorage.getItem('token');
-            // Only record if logged in? The backend requires auth for recordDownload.
-            // If public download is allowed, backend needs update. 
-            // Assuming auth is required for tracking user downloads, but maybe not for count?
-            // Checking backend: recordDownload uses req.user.userId. So user MUST be logged in.
 
             if (user && token) {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/download`, {
@@ -76,7 +68,6 @@ export default function AssetDetailsPage() {
                 });
                 const data = await res.json();
                 if (data.success) {
-                    // Update local state to show new download count immediately
                     setAsset((prev: any) => ({
                         ...prev,
                         downloads: data.downloads
@@ -130,7 +121,7 @@ export default function AssetDetailsPage() {
             if (data.success) {
                 setCommentText('');
                 setCommentRating(5);
-                fetchAsset(); // Refresh to show new comment
+                fetchAsset(); 
             } else {
                 alert(data.message || 'Failed to add comment');
             }
@@ -155,7 +146,7 @@ export default function AssetDetailsPage() {
             });
             const data = await res.json();
             if (data.success) {
-                fetchAsset(); // Refresh to remove deleted comment
+                fetchAsset(); 
             } else {
                 alert(data.message || 'Failed to delete comment');
             }
@@ -189,13 +180,11 @@ export default function AssetDetailsPage() {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
-            {/* Animated Background */}
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             <div className="container-custom relative z-10">
-                {/* Breadcrumb */}
                 <div className="flex items-center gap-3 text-sm mb-8 animate-fade-in">
                     <Link href="/browse" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
                         <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
@@ -208,9 +197,7 @@ export default function AssetDetailsPage() {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-8 items-start animate-slide-up">
-                    {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Preview Image */}
                         <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-linear-to-br from-cyan-900/20 to-blue-900/20 shadow-2xl shadow-cyan-500/10 group">
                             <img
                                 src={asset.imageUrl}
@@ -218,18 +205,16 @@ export default function AssetDetailsPage() {
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    target.src = '/PreviewUnavailable.png'; // Fallback image
-                                    target.onerror = null; // Prevent infinite loop if fallback fails
+                                    target.src = '/PreviewUnavailable.png';
+                                    target.onerror = null;
                                 }}
                             />
                             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
-                            {/* Category Badge */}
                             <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold text-white border border-white/20">
                                 {asset.category}
                             </div>
 
-                            {/* Free Badge */}
                             {asset.price === 0 && (
                                 <div className="absolute top-4 right-4 bg-linear-to-r from-green-500 to-emerald-500 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-lg">
                                     FREE
@@ -237,7 +222,6 @@ export default function AssetDetailsPage() {
                             )}
                         </div>
 
-                        {/* Description Card */}
                         <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="w-10 h-10 rounded-xl gradient-bg-secondary flex items-center justify-center">
@@ -250,7 +234,6 @@ export default function AssetDetailsPage() {
                             </p>
                         </div>
 
-                        {/* Tags */}
                         <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <h3 className="text-xl font-bold text-white mb-4">Tags</h3>
                             <div className="flex flex-wrap gap-2">
@@ -265,7 +248,6 @@ export default function AssetDetailsPage() {
                             </div>
                         </div>
 
-                        {/* Stats Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="bg-linear-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
                                 <div className="text-3xl font-bold gradient-text mb-1">{asset.rating}</div>
@@ -285,7 +267,7 @@ export default function AssetDetailsPage() {
                             </div>
                         </div>
 
-                        {/* Comments Section */}
+
                         <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="w-10 h-10 rounded-xl gradient-bg-secondary flex items-center justify-center">
@@ -297,7 +279,6 @@ export default function AssetDetailsPage() {
                                 </span>
                             </div>
 
-                            {/* Add Comment Form */}
                             {user ? (
                                 <form onSubmit={handleAddComment} className="mb-8 p-6 bg-white/5 rounded-xl border border-white/10">
                                     <div className="flex items-center gap-3 mb-4">
@@ -310,7 +291,6 @@ export default function AssetDetailsPage() {
                                         </div>
                                     </div>
 
-                                    {/* Rating Selector */}
                                     <div className="mb-4">
                                         <label className="block text-sm text-gray-400 mb-2">Your Rating</label>
                                         <div className="flex gap-2">
@@ -333,7 +313,6 @@ export default function AssetDetailsPage() {
                                         </div>
                                     </div>
 
-                                    {/* Comment Text */}
                                     <textarea
                                         value={commentText}
                                         onChange={(e) => setCommentText(e.target.value)}
@@ -366,7 +345,6 @@ export default function AssetDetailsPage() {
                                 </div>
                             )}
 
-                            {/* Comments List */}
                             <div className="space-y-4">
                                 {asset.comments && asset.comments.length > 0 ? (
                                     asset.comments
@@ -417,13 +395,10 @@ export default function AssetDetailsPage() {
                         </div>
                     </div>
 
-                    {/* Sidebar */}
                     <div className="space-y-6">
-                        {/* Main Info Card */}
                         <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl p-8 rounded-2xl border border-white/10 sticky top-32 shadow-2xl">
                             <h1 className="text-3xl font-bold text-white mb-6 leading-tight">{asset.title}</h1>
 
-                            {/* Author */}
                             <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/10">
                                 <div className="w-12 h-12 rounded-full gradient-bg-secondary flex items-center justify-center text-white font-bold text-lg shadow-lg">
                                     {asset.author.charAt(0).toUpperCase()}
@@ -434,7 +409,6 @@ export default function AssetDetailsPage() {
                                 </div>
                             </div>
 
-                            {/* Price & Rating */}
                             <div className="flex items-center justify-between mb-6">
                                 <div className="text-3xl font-bold">
                                     {asset.price === 0 ? (
@@ -449,7 +423,6 @@ export default function AssetDetailsPage() {
                                 </div>
                             </div>
 
-                            {/* Download Button */}
                             <button
                                 onClick={handleDownload}
                                 className="w-full py-4 gradient-bg-primary text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all hover:shadow-cyan-500/50 hover:-translate-y-1 flex items-center justify-center gap-3 mb-4 group text-lg"
@@ -458,7 +431,6 @@ export default function AssetDetailsPage() {
                                 {asset.price === 0 ? 'Download Now' : 'Buy Now'}
                             </button>
 
-                            {/* Action Buttons */}
                             <div className="grid grid-cols-2 gap-3 mb-6">
                                 <button
                                     onClick={() => setLiked(!liked)}
@@ -478,7 +450,6 @@ export default function AssetDetailsPage() {
                                 </button>
                             </div>
 
-                            {/* Details */}
                             <div className="space-y-4 pt-6 border-t border-white/10">
                                 <div className="flex items-center justify-between text-sm">
                                     <span className="text-gray-500 flex items-center gap-2">
@@ -506,7 +477,6 @@ export default function AssetDetailsPage() {
                                 </div>
                             </div>
 
-                            {/* Security Badge */}
                             <div className="mt-6 flex items-center justify-center gap-2 text-xs text-green-400 font-medium bg-green-500/5 py-2.5 rounded-lg border border-green-500/20">
                                 <FaShieldHalved />
                                 Secure & Virus Free

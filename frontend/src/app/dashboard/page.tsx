@@ -42,7 +42,6 @@ export default function DashboardPage() {
 
     if (!user) return null;
 
-    // Render appropriate dashboard based on role
     return (
         <>
             {user.role === 'developer' && <DeveloperDashboard />}

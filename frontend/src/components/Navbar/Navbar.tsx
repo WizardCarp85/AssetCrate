@@ -14,7 +14,6 @@ export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        // Check auth status
         const token = localStorage.getItem('token');
         const userData = localStorage.getItem('user');
 
@@ -23,7 +22,6 @@ export default function Navbar() {
             setUser(JSON.parse(userData));
         }
 
-        // Handle scroll effect
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
@@ -40,11 +38,6 @@ export default function Navbar() {
         router.push('/');
     };
 
-    // Don't show navbar on login/signup pages if you prefer, but usually it's fine.
-    // For this design, let's keep it everywhere but maybe simpler on auth pages?
-    // The user asked for it to be missing from store page, implying they want it there.
-    // So we render it everywhere.
-
     return (
         <>
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 py-3' : 'bg-transparent py-5'
@@ -59,7 +52,6 @@ export default function Navbar() {
                         </Link>
 
                         {isAuthenticated ? (
-                            // Authenticated navbar
                             <>
                                 <div className="hidden md:flex items-center gap-6">
                                     <Link
@@ -99,7 +91,6 @@ export default function Navbar() {
                                     </button>
                                 </div>
 
-                                {/* Mobile Menu Button - Authenticated */}
                                 <button
                                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                                     className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors"
@@ -109,7 +100,6 @@ export default function Navbar() {
                                 </button>
                             </>
                         ) : (
-                            // Guest navbar
                             <>
                                 <div className="hidden md:flex items-center gap-8">
                                     <Link href="/#features" className="text-sm font-semibold text-gray-300 hover:text-white transition-colors">
@@ -137,7 +127,6 @@ export default function Navbar() {
                                     </Link>
                                 </div>
 
-                                {/* Mobile Menu Button - Guest */}
                                 <button
                                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                                     className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors"
@@ -151,7 +140,6 @@ export default function Navbar() {
                 </div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
             {mobileMenuOpen && (
                 <div
                     className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
@@ -159,11 +147,9 @@ export default function Navbar() {
                 />
             )}
 
-            {/* Mobile Menu Slide-in */}
             <div className={`fixed top-0 right-0 h-full w-[280px] bg-[#0a0a0a] border-l border-white/10 z-50 transform transition-transform duration-300 ease-in-out md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}>
                 <div className="flex flex-col h-full">
-                    {/* Mobile Menu Header */}
                     <div className="flex items-center justify-between p-6 border-b border-white/10">
                         <span className="text-lg font-bold text-white">Menu</span>
                         <button
@@ -175,11 +161,9 @@ export default function Navbar() {
                         </button>
                     </div>
 
-                    {/* Mobile Menu Content */}
                     <div className="flex-1 overflow-y-auto p-6">
                         {isAuthenticated ? (
                             <div className="space-y-6">
-                                {/* User Profile */}
                                 <Link
                                     href="/profile"
                                     onClick={() => setMobileMenuOpen(false)}
@@ -194,7 +178,6 @@ export default function Navbar() {
                                     </div>
                                 </Link>
 
-                                {/* Navigation Links */}
                                 <div className="space-y-2">
                                     <Link
                                         href="/dashboard"
@@ -214,7 +197,6 @@ export default function Navbar() {
                                     </Link>
                                 </div>
 
-                                {/* Logout Button */}
                                 <button
                                     onClick={() => {
                                         handleLogout();
@@ -227,7 +209,6 @@ export default function Navbar() {
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {/* Navigation Links */}
                                 <div className="space-y-2">
                                     <Link
                                         href="/#features"
@@ -252,7 +233,6 @@ export default function Navbar() {
                                     </Link>
                                 </div>
 
-                                {/* Auth Buttons */}
                                 <div className="space-y-3 pt-4 border-t border-white/10">
                                     <Link
                                         href="/login"

@@ -59,7 +59,6 @@ export default function CreatorDashboard() {
 
             const result = await res.json();
             if (result.success) {
-                // Refresh dashboard data
                 fetchDashboardData();
             } else {
                 alert(result.message || 'Failed to delete asset');
@@ -96,8 +95,7 @@ export default function CreatorDashboard() {
     return (
         <>
             <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+                <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px]"></div>
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -119,7 +117,6 @@ export default function CreatorDashboard() {
                         </button>
                     </div>
 
-                    {/* Stats Cards */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
                         <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
@@ -162,7 +159,6 @@ export default function CreatorDashboard() {
                         </div>
                     </div>
 
-                    {/* Uploaded Assets */}
                     {data?.assets && data.assets.length > 0 ? (
                         <div>
                             <h2 className="text-2xl font-bold text-white mb-6">Your Assets</h2>
@@ -173,10 +169,19 @@ export default function CreatorDashboard() {
                                         className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/50 transition-all duration-300"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
-                                                <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
+                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
+                                                <img
+                                                    src={asset.imageUrl}
+                                                    alt={asset.title}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        const target = e.target as HTMLImageElement;
+                                                        target.src = '/Dashboardpreview.png';
+                                                        target.onerror = null;
+                                                    }}
+                                                />
                                             </div>
-                                            <div className="flex-grow">
+                                            <div className="grow">
                                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                                     <div>
                                                         <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{asset.title}</h3>
@@ -195,7 +200,6 @@ export default function CreatorDashboard() {
                                                     </span>
                                                 </div>
 
-                                                {/* Rejection Reason */}
                                                 {asset.approvalStatus === 'rejected' && asset.rejectionReason && (
                                                     <div className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
                                                         <p className="text-xs font-semibold text-red-400 mb-1">Rejection Reason:</p>
@@ -203,7 +207,6 @@ export default function CreatorDashboard() {
                                                     </div>
                                                 )}
 
-                                                {/* Action Buttons */}
                                                 <div className="flex flex-wrap gap-2 sm:gap-3 mt-4">
                                                     {asset.approvalStatus === 'approved' && (
                                                         <Link

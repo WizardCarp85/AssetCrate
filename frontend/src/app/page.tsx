@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { FaXTwitter, FaDiscord, FaReddit, FaPalette, FaMagnifyingGlass, FaBolt, FaImage, FaHeart, FaShieldHalved, FaPenToSquare, FaRocket, FaGamepad, FaWandMagicSparkles, FaUser } from 'react-icons/fa6';
+import { FaPalette, FaMagnifyingGlass, FaBolt, FaImage, FaHeart, FaShieldHalved, FaPenToSquare, FaRocket, FaGamepad, FaWandMagicSparkles, FaUser } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { BackgroundBeams } from '@/components/ui/background-beams';
 
 export default function Home() {
   const router = useRouter();
@@ -11,7 +12,6 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Check if user is logged in
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
 
@@ -39,15 +39,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
-      {/* Hero Section */}
 
-      {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-[#050505]">
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
-        {/* Vibrant Floating Orbs */}
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+        <BackgroundBeams className="absolute inset-0 z-0" />
+
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse" style={{ animationDelay: '2s' }}></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
@@ -91,7 +89,6 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 border-t border-white/10 pt-12 max-w-4xl mx-auto px-4">
               {[
                 { label: 'Active Users', value: '10K+' },
@@ -109,7 +106,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="py-32 bg-[#0a0a0a] relative">
         <div className="container-custom">
           <div className="text-center mb-20">
@@ -173,9 +169,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Roles Section */}
       <section id="roles" className="py-32 bg-black relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[24px_24px]"></div>
 
         <div className="container-custom relative z-10">
           <div className="text-center mb-20">
@@ -186,7 +181,6 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* User Role */}
             <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-2">
               <div className="w-20 h-20 gradient-bg-secondary rounded-3xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <FaUser className="text-4xl text-white" />
@@ -203,7 +197,7 @@ export default function Home() {
                   'Get instant updates'
                 ].map((benefit, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
-                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     {benefit}
@@ -218,7 +212,6 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Creator Role */}
             <div className="group bg-[#0a0a0a] p-10 rounded-[2.5rem] border border-white/10 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
@@ -237,7 +230,7 @@ export default function Home() {
                   'Build your reputation'
                 ].map((benefit, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-gray-300 font-medium">
-                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     </div>
                     {benefit}
@@ -255,7 +248,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
       <section id="how-it-works" className="py-32 bg-[#0a0a0a]">
         <div className="container-custom">
           <div className="text-center mb-20">
@@ -266,7 +258,6 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
-            {/* Connecting Line Background */}
             <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-linear-to-r from-transparent via-cyan-500/30 to-transparent"></div>
 
             {[
@@ -302,9 +293,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-32 relative overflow-hidden bg-black border-t border-white/5">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[32px_32px]"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent to-black/80"></div>
 
         <div className="container-custom relative z-10">
@@ -330,8 +320,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
     </div>
   );
 }

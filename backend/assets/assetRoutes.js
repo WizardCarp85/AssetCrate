@@ -15,13 +15,11 @@ const {
 } = require('./assetController');
 const authMiddleware = require('../user/authMiddleware');
 
-// Public routes
 router.get('/', getAssets);
 router.get('/:id', getAssetById);
 router.post('/seed', seedAssets);
 router.post('/:id/view', incrementViews);
 
-// Protected routes
 router.post('/', authMiddleware, uploadAsset);
 router.put('/:id', authMiddleware, updateAsset);
 router.delete('/:id', authMiddleware, deleteAsset);

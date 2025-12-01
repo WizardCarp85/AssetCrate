@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { FaUsers, FaBoxOpen, FaClock, FaCircleCheck, FaCircleXmark, FaUserShield, FaPenToSquare } from 'react-icons/fa6';
 import AssetReviewModal from '@/components/AssetReviewModal/AssetReviewModal';
 import UploadModal from '@/components/UploadModal/UploadModal';
@@ -14,14 +13,12 @@ export default function AdminDashboard() {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [editingAsset, setEditingAsset] = useState<any>(null);
 
-    // All Assets State
     const [showAllAssets, setShowAllAssets] = useState(false);
     const [allAssets, setAllAssets] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [sortBy, setSortBy] = useState('newest');
 
-    // Pending Assets State
     const [showPendingAssets, setShowPendingAssets] = useState(true);
     const [pendingAssets, setPendingAssets] = useState<any[]>([]);
     const [pendingPage, setPendingPage] = useState(1);
@@ -120,10 +117,9 @@ export default function AdminDashboard() {
 
             const result = await res.json();
             if (result.success) {
-                // Refresh dashboard data and pending list
                 fetchDashboardData();
                 fetchPendingAssets();
-                fetchAdminAssets(); // Also refresh all assets list if open
+                fetchAdminAssets();
             }
         } catch (error) {
             console.error('Error approving asset:', error);
@@ -170,8 +166,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
-            {/* Animated Background */}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px]"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -179,7 +174,6 @@ export default function AdminDashboard() {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">Admin Dashboard</h1>
                 <p className="text-gray-400 mb-12">Manage users, approve assets, and monitor platform activity</p>
 
-                {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
                     <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-3">
@@ -222,8 +216,7 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
-                {/* Pending Asset Approvals */}
-                <div className="mb-12">
+=                <div className="mb-12">
                     <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                         <h2 className="text-2xl font-bold text-white">Pending Asset Approvals</h2>
                         <div className="flex items-center gap-3">
@@ -257,10 +250,10 @@ export default function AdminDashboard() {
                                         className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-yellow-500/30 p-4 sm:p-6"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
+                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
-                                            <div className="flex-grow">
+                                            <div className="grow">
                                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                                     <div>
                                                         <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{asset.title}</h3>
@@ -310,7 +303,6 @@ export default function AdminDashboard() {
                                 ))}
                             </div>
 
-                            {/* Pagination */}
                             <div className="flex justify-center items-center gap-4">
                                 <button
                                     onClick={() => setPendingPage(prev => Math.max(prev - 1, 1))}
@@ -334,7 +326,6 @@ export default function AdminDashboard() {
                     )}
                 </div>
 
-                {/* All Assets Management */}
                 <div className="mb-12">
                     <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                         <h2 className="text-2xl font-bold text-white">Manage All Assets</h2>
@@ -369,10 +360,10 @@ export default function AdminDashboard() {
                                         className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/30 transition-all"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
+                                            <div className="w-full sm:w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
-                                            <div className="flex-grow">
+                                            <div className="grow">
                                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2">
                                                     <div>
                                                         <h3 className="text-lg font-bold text-white">{asset.title}</h3>
@@ -405,7 +396,6 @@ export default function AdminDashboard() {
                                 ))}
                             </div>
 
-                            {/* Pagination */}
                             <div className="flex justify-center items-center gap-4">
                                 <button
                                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
@@ -429,7 +419,6 @@ export default function AdminDashboard() {
                     )}
                 </div>
 
-                {/* Recent Users */}
                 {data?.recentUsers && data.recentUsers.length > 0 && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-bold text-white mb-6">Recent Users</h2>
@@ -469,7 +458,6 @@ export default function AdminDashboard() {
                     </div>
                 )}
 
-                {/* Empty State */}
                 {(!pendingAssets || pendingAssets.length === 0) && (!allAssets || allAssets.length === 0) && (
                     <div className="text-center py-12 bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10">
                         <FaCircleCheck className="text-5xl text-green-500 mx-auto mb-4" />

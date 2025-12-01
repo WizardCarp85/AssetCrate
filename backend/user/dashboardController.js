@@ -1,7 +1,7 @@
 const User = require('./User');
 const Asset = require('../assets/Asset');
 
-// Get Developer Dashboard Data
+
 exports.getDeveloperDashboard = async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -44,7 +44,6 @@ exports.getDeveloperDashboard = async (req, res) => {
     }
 };
 
-// Get Creator Dashboard Data
 exports.getCreatorDashboard = async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -76,7 +75,6 @@ exports.getCreatorDashboard = async (req, res) => {
     }
 };
 
-// Get Admin Dashboard Data
 exports.getAdminDashboard = async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
@@ -104,7 +102,7 @@ exports.getAdminDashboard = async (req, res) => {
 
         const allAssets = await Asset.find()
             .sort({ createdAt: -1 })
-            .limit(20); // Limit to 20 for now to avoid huge payload
+            .limit(20); 
 
         res.json({
             success: true,
@@ -124,20 +122,17 @@ exports.getAdminDashboard = async (req, res) => {
     }
 };
 
-// Approve Asset (Admin only)
 exports.approveAsset = async (req, res) => {
   try {
     const { assetId } = req.params;
-    const { status, rejectionReason } = req.body; // 'approved' or 'rejected'
+    const { status, rejectionReason } = req.body; 
 
     const updateData = { approvalStatus: status };
     
-    // If rejecting, save the reason
     if (status === 'rejected' && rejectionReason) {
       updateData.rejectionReason = rejectionReason;
     }
-    
-    // If approving, clear any previous rejection reason
+
     if (status === 'approved') {
       updateData.rejectionReason = '';
     }
@@ -169,7 +164,6 @@ exports.approveAsset = async (req, res) => {
   }
 };
 
-// Get All Users (Admin only)
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password');
@@ -187,7 +181,6 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-// Update User Role (Admin only)
 exports.updateUserRole = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -220,7 +213,6 @@ exports.updateUserRole = async (req, res) => {
     }
 };
 
-// Get Admin Assets (Paginated)
 exports.getAdminAssets = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
@@ -259,7 +251,6 @@ exports.getAdminAssets = async (req, res) => {
     }
 };
 
-// Get Pending Assets (Paginated)
 exports.getPendingAssets = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;

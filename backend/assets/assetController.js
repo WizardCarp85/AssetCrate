@@ -325,7 +325,6 @@ exports.seedAssets = async (req, res) => {
 
     await Asset.deleteMany();
 
-    // Add author and creatorId to each seed asset
     const assetsWithAuthor = seedAssets.map(asset => ({
       ...asset,
       author: admin.username,
@@ -345,16 +344,12 @@ exports.seedAssets = async (req, res) => {
   }
 };
 
-// @desc    Add comment to asset
-// @route   POST /api/assets/:id/comments
-// @access  Private
 exports.addComment = async (req, res) => {
   try {
     const assetId = req.params.id;
     const userId = req.user.userId;
     const { text, rating } = req.body;
 
-    // Validate input
     if (!text || !rating) {
       return res.status(400).json({
         success: false,
@@ -369,7 +364,6 @@ exports.addComment = async (req, res) => {
       });
     }
 
-    // Get user info
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -378,7 +372,6 @@ exports.addComment = async (req, res) => {
       });
     }
 
-    // Get asset
     const asset = await Asset.findById(assetId);
     if (!asset) {
       return res.status(404).json({
@@ -387,7 +380,6 @@ exports.addComment = async (req, res) => {
       });
     }
 
-    // Create comment object
     const comment = {
       userId: userId,
       username: user.username,
@@ -397,10 +389,8 @@ exports.addComment = async (req, res) => {
       createdAt: new Date()
     };
 
-    // Add comment to asset
     asset.comments.push(comment);
 
-    // Update asset's average rating
     const totalRating = asset.comments.reduce((sum, c) => sum + c.rating, 0);
     asset.rating = totalRating / asset.comments.length;
 
@@ -417,16 +407,12 @@ exports.addComment = async (req, res) => {
   }
 };
 
-// @desc    Delete comment from asset
-// @route   DELETE /api/assets/:id/comments/:commentId
-// @access  Private (own comment) or Admin
 exports.deleteComment = async (req, res) => {
   try {
     const { id: assetId, commentId } = req.params;
     const userId = req.user.userId;
     const userRole = req.user.role;
 
-    // Get asset
     const asset = await Asset.findById(assetId);
     if (!asset) {
       return res.status(404).json({
@@ -435,7 +421,6 @@ exports.deleteComment = async (req, res) => {
       });
     }
 
-    // Find comment
     const comment = asset.comments.id(commentId);
     if (!comment) {
       return res.status(404).json({
@@ -444,7 +429,6 @@ exports.deleteComment = async (req, res) => {
       });
     }
 
-    // Check authorization (user can delete own comment, admin can delete any)
     if (comment.userId.toString() !== userId && userRole !== 'admin') {
       return res.status(403).json({
         success: false,
@@ -452,15 +436,13 @@ exports.deleteComment = async (req, res) => {
       });
     }
 
-    // Remove comment
     comment.deleteOne();
 
-    // Recalculate average rating
     if (asset.comments.length > 0) {
       const totalRating = asset.comments.reduce((sum, c) => sum + c.rating, 0);
       asset.rating = totalRating / asset.comments.length;
     } else {
-      asset.rating = 5; // Default rating if no comments
+      asset.rating = 5;
     }
 
     await asset.save();

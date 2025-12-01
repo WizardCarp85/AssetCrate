@@ -42,8 +42,7 @@ export default function DeveloperDashboard() {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
-            {/* Animated Background */}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px]"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -51,7 +50,6 @@ export default function DeveloperDashboard() {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">Developer Dashboard</h1>
                 <p className="text-gray-400 mb-12">Track your downloads and favorite assets</p>
 
-                {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-12">
                     <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
@@ -74,7 +72,6 @@ export default function DeveloperDashboard() {
                     </div>
                 </div>
 
-                {/* Favorite Assets */}
                 {data?.favorites && data.favorites.length > 0 && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-bold text-white mb-6">Your Favorites</h2>
@@ -102,7 +99,6 @@ export default function DeveloperDashboard() {
                     </div>
                 )}
 
-                {/* Recent Downloads */}
                 {data?.recentDownloads && data.recentDownloads.length > 0 && (
                     <div>
                         <h2 className="text-2xl font-bold text-white mb-6">Recent Downloads</h2>
@@ -130,7 +126,6 @@ export default function DeveloperDashboard() {
                     </div>
                 )}
 
-                {/* Empty State */}
                 {(!data?.favorites || data.favorites.length === 0) && (!data?.recentDownloads || data.recentDownloads.length === 0) && (
                     <div className="text-center py-20">
                         <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">

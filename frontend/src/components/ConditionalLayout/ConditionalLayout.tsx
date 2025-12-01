@@ -7,7 +7,6 @@ import Footer from '@/components/Footer/Footer';
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    // Hide navbar and footer on auth pages
     const hideLayout = pathname === '/login' || pathname === '/signup';
 
     return (

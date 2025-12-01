@@ -2,12 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./User');
 
-// Signup controller
 exports.signup = async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
 
-    // Validate input
     if (!username || !email || !password) {
       return res.status(400).json({ 
         success: false, 
@@ -15,7 +13,6 @@ exports.signup = async (req, res) => {
       });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ 
       $or: [{ email }, { username }] 
     });
@@ -29,11 +26,9 @@ exports.signup = async (req, res) => {
       });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
     const user = new User({
       username,
       email,
@@ -43,7 +38,6 @@ exports.signup = async (req, res) => {
 
     await user.save();
 
-    // Generate JWT token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -70,12 +64,10 @@ exports.signup = async (req, res) => {
   }
 };
 
-// Login controller
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({ 
         success: false, 
@@ -83,7 +75,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Find user by email
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -93,7 +84,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -103,7 +93,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,

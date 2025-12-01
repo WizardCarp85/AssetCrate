@@ -23,7 +23,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
 
     const categories = ['3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI', '2D'];
 
-    // Load initial data when modal opens or initialData changes
     if (isOpen && initialData && formData.title === '' && !loading) {
         setFormData({
             title: initialData.title || '',
@@ -65,7 +64,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
             const result = await res.json();
 
             if (result.success) {
-                // Reset form
                 setFormData({
                     title: '',
                     description: '',
@@ -92,7 +90,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
             <div className="bg-linear-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-                {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-3xl font-bold text-white">{initialData ? 'Edit Asset' : 'Upload Asset'}</h2>
                     <button
@@ -114,7 +111,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Title */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-300 mb-2">
                             Title *
@@ -129,7 +125,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         />
                     </div>
 
-                    {/* Description */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-300 mb-2">
                             Description *
@@ -144,7 +139,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         />
                     </div>
 
-                    {/* Category */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-300 mb-2">
                             Category *
@@ -160,7 +154,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         </select>
                     </div>
 
-                    {/* Image URL */}
                     <div>
                         <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaImage className="text-cyan-400" />
@@ -176,7 +169,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         />
                     </div>
 
-                    {/* File URL */}
                     <div>
                         <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaLink className="text-cyan-400" />
@@ -192,7 +184,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         />
                     </div>
 
-                    {/* Tags */}
                     <div>
                         <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaTags className="text-cyan-400" />
@@ -207,7 +198,6 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
                         />
                     </div>
 
-                    {/* Submit Button */}
                     <div className="flex gap-4 pt-4">
                         <button
                             type="button"
