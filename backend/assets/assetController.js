@@ -457,3 +457,67 @@ exports.deleteComment = async (req, res) => {
   }
 };
 
+exports.updateComment = async (req, res) => {
+  try {
+    const { id: assetId, commentId } = req.params;
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+    const { text, rating } = req.body;
+
+    if (!text && !rating) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide text or rating to update'
+      });
+    }
+
+    if (rating && (rating < 1 || rating > 5)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rating must be between 1 and 5'
+      });
+    }
+
+    const asset = await Asset.findById(assetId);
+    if (!asset) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asset not found'
+      });
+    }
+
+    const comment = asset.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Comment not found'
+      });
+    }
+
+    if (comment.userId.toString() !== userId && userRole !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized to edit this comment'
+      });
+    }
+
+    if (text) comment.text = text;
+    if (rating) comment.rating = rating;
+
+    // Recalculate asset rating
+    const totalRating = asset.comments.reduce((sum, c) => sum + c.rating, 0);
+    asset.rating = totalRating / asset.comments.length;
+
+    await asset.save();
+
+    res.json({
+      success: true,
+      message: 'Comment updated successfully',
+      data: comment
+    });
+  } catch (err) {
+    console.error('Update comment error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+

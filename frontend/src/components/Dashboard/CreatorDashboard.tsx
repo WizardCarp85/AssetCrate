@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaUpload, FaDownload, FaEye, FaClock, FaCircleCheck, FaCircleXmark, FaPenToSquare, FaTrash } from 'react-icons/fa6';
 import UploadModal from '@/components/UploadModal/UploadModal';
+import DeleteConfirmModal from '@/components/DeleteConfirmModal/DeleteConfirmModal';
 
 export default function CreatorDashboard() {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [deleting, setDeleting] = useState<string | null>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [assetToDelete, setAssetToDelete] = useState<any>(null);
 
     const [editingAsset, setEditingAsset] = useState<any>(null);
 
@@ -42,15 +45,13 @@ export default function CreatorDashboard() {
         setIsUploadModalOpen(true);
     };
 
-    const handleDeleteAsset = async (assetId: string) => {
-        if (!confirm('Are you sure you want to delete this asset? This action cannot be undone.')) {
-            return;
-        }
+    const handleDeleteAsset = async () => {
+        if (!assetToDelete) return;
 
-        setDeleting(assetId);
+        setDeleting(assetToDelete._id);
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${assetId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${assetToDelete._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -60,15 +61,19 @@ export default function CreatorDashboard() {
             const result = await res.json();
             if (result.success) {
                 fetchDashboardData();
-            } else {
-                alert(result.message || 'Failed to delete asset');
+                setDeleteModalOpen(false);
+                setAssetToDelete(null);
             }
         } catch (error) {
             console.error('Error deleting asset:', error);
-            alert('Failed to delete asset');
         } finally {
             setDeleting(null);
         }
+    };
+
+    const openDeleteModal = (asset: any) => {
+        setAssetToDelete(asset);
+        setDeleteModalOpen(true);
     };
 
     const getStatusBadge = (status: string) => {
@@ -223,7 +228,7 @@ export default function CreatorDashboard() {
                                                         <FaPenToSquare /> Edit
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteAsset(asset._id)}
+                                                        onClick={() => openDeleteModal(asset)}
                                                         disabled={deleting === asset._id}
                                                         className="px-3 sm:px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-xs sm:text-sm font-semibold disabled:opacity-50 flex items-center gap-2"
                                                     >
@@ -262,6 +267,19 @@ export default function CreatorDashboard() {
                 onClose={() => setIsUploadModalOpen(false)}
                 onSuccess={fetchDashboardData}
                 initialData={editingAsset}
+            />
+
+            <DeleteConfirmModal
+                isOpen={deleteModalOpen}
+                onClose={() => {
+                    setDeleteModalOpen(false);
+                    setAssetToDelete(null);
+                }}
+                onConfirm={handleDeleteAsset}
+                title="Delete Asset"
+                message="Do you really want to delete this asset?"
+                itemName={assetToDelete?.title}
+                isDeleting={deleting === assetToDelete?._id}
             />
         </>
     );

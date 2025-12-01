@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { FaUsers, FaBoxOpen, FaClock, FaCircleCheck, FaCircleXmark, FaUserShield, FaPenToSquare } from 'react-icons/fa6';
 import AssetReviewModal from '@/components/AssetReviewModal/AssetReviewModal';
 import UploadModal from '@/components/UploadModal/UploadModal';
+import DeleteConfirmModal from '@/components/DeleteConfirmModal/DeleteConfirmModal';
 
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
@@ -12,6 +13,8 @@ export default function AdminDashboard() {
     const [reviewAsset, setReviewAsset] = useState<any>(null);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [editingAsset, setEditingAsset] = useState<any>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [assetToDelete, setAssetToDelete] = useState<any>(null);
 
     const [showAllAssets, setShowAllAssets] = useState(false);
     const [allAssets, setAllAssets] = useState<any[]>([]);
@@ -128,14 +131,12 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleDeleteAsset = async (assetId: string) => {
-        if (!confirm('Are you sure you want to delete this asset? This action cannot be undone.')) {
-            return;
-        }
+    const handleDeleteAsset = async () => {
+        if (!assetToDelete) return;
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${assetId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${assetToDelete._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -147,13 +148,17 @@ export default function AdminDashboard() {
                 fetchDashboardData();
                 fetchAdminAssets();
                 fetchPendingAssets();
-            } else {
-                alert(result.message || 'Failed to delete asset');
+                setDeleteModalOpen(false);
+                setAssetToDelete(null);
             }
         } catch (error) {
             console.error('Error deleting asset:', error);
-            alert('Failed to delete asset');
         }
+    };
+
+    const openDeleteModal = (asset: any) => {
+        setAssetToDelete(asset);
+        setDeleteModalOpen(true);
     };
 
     if (loading) {
@@ -216,7 +221,7 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
-=                <div className="mb-12">
+                =                <div className="mb-12">
                     <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                         <h2 className="text-2xl font-bold text-white">Pending Asset Approvals</h2>
                         <div className="flex items-center gap-3">
@@ -383,7 +388,7 @@ export default function AdminDashboard() {
                                                             <FaPenToSquare /> Edit
                                                         </button>
                                                         <button
-                                                            onClick={() => handleDeleteAsset(asset._id)}
+                                                            onClick={() => openDeleteModal(asset)}
                                                             className="px-3 py-1.5 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-xs font-semibold flex items-center gap-2"
                                                         >
                                                             <FaCircleXmark /> Delete
@@ -491,6 +496,18 @@ export default function AdminDashboard() {
                 onClose={() => setIsUploadModalOpen(false)}
                 onSuccess={fetchDashboardData}
                 initialData={editingAsset}
+            />
+
+            <DeleteConfirmModal
+                isOpen={deleteModalOpen}
+                onClose={() => {
+                    setDeleteModalOpen(false);
+                    setAssetToDelete(null);
+                }}
+                onConfirm={handleDeleteAsset}
+                title="Delete Asset"
+                message="Do you really want to delete this asset?"
+                itemName={assetToDelete?.title}
             />
         </div>
     );

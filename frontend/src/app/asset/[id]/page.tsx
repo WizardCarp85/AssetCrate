@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaFileLines, FaComments, FaTrash, FaPaperPlane} from 'react-icons/fa6';
+import { FaStar, FaDownload, FaShare, FaHeart, FaShieldHalved, FaArrowLeft, FaClock, FaFile, FaAward, FaFaceFrown, FaFileLines, FaComments, FaTrash, FaPaperPlane, FaPenToSquare, FaXmark } from 'react-icons/fa6';
+import DeleteConfirmModal from '@/components/DeleteConfirmModal/DeleteConfirmModal';
 
 export default function AssetDetailsPage() {
     const params = useParams();
@@ -14,6 +15,13 @@ export default function AssetDetailsPage() {
     const [commentRating, setCommentRating] = useState(5);
     const [submittingComment, setSubmittingComment] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState<any>(null);
+    const [deletingComment, setDeletingComment] = useState(false);
+    const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+    const [editCommentText, setEditCommentText] = useState('');
+    const [editCommentRating, setEditCommentRating] = useState(5);
+    const [updatingComment, setUpdatingComment] = useState(false);
 
     useEffect(() => {
         if (params.id) {
@@ -121,7 +129,7 @@ export default function AssetDetailsPage() {
             if (data.success) {
                 setCommentText('');
                 setCommentRating(5);
-                fetchAsset(); 
+                fetchAsset();
             } else {
                 alert(data.message || 'Failed to add comment');
             }
@@ -133,12 +141,13 @@ export default function AssetDetailsPage() {
         }
     };
 
-    const handleDeleteComment = async (commentId: string) => {
-        if (!confirm('Are you sure you want to delete this comment?')) return;
+    const handleDeleteComment = async () => {
+        if (!commentToDelete) return;
 
+        setDeletingComment(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/comments/${commentId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/comments/${commentToDelete._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -146,13 +155,60 @@ export default function AssetDetailsPage() {
             });
             const data = await res.json();
             if (data.success) {
-                fetchAsset(); 
-            } else {
-                alert(data.message || 'Failed to delete comment');
+                fetchAsset();
+                setDeleteModalOpen(false);
+                setCommentToDelete(null);
             }
         } catch (err) {
             console.error('Error deleting comment:', err);
-            alert('Failed to delete comment');
+        } finally {
+            setDeletingComment(false);
+        }
+    };
+
+    const openDeleteCommentModal = (comment: any) => {
+        setCommentToDelete(comment);
+        setDeleteModalOpen(true);
+    };
+
+    const startEditComment = (comment: any) => {
+        setEditingCommentId(comment._id);
+        setEditCommentText(comment.text);
+        setEditCommentRating(comment.rating);
+    };
+
+    const cancelEditComment = () => {
+        setEditingCommentId(null);
+        setEditCommentText('');
+        setEditCommentRating(5);
+    };
+
+    const handleUpdateComment = async (commentId: string) => {
+        if (!editCommentText.trim()) return;
+
+        setUpdatingComment(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/comments/${commentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    text: editCommentText,
+                    rating: editCommentRating
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAsset();
+                cancelEditComment();
+            }
+        } catch (err) {
+            console.error('Error updating comment:', err);
+        } finally {
+            setUpdatingComment(false);
         }
     };
 
@@ -365,24 +421,86 @@ export default function AssetDetailsPage() {
                                                                 <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
                                                                 <span>•</span>
                                                                 <div className="flex items-center gap-1">
-                                                                    {[...Array(comment.rating)].map((_, i) => (
-                                                                        <FaStar key={i} className="text-yellow-400 text-xs fill-current" />
-                                                                    ))}
+                                                                    {editingCommentId === comment._id ? (
+                                                                        <>
+                                                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                                                <button
+                                                                                    key={star}
+                                                                                    type="button"
+                                                                                    onClick={() => setEditCommentRating(star)}
+                                                                                    className="transition-all hover:scale-110"
+                                                                                >
+                                                                                    <FaStar
+                                                                                        className={`text-sm ${star <= editCommentRating
+                                                                                            ? 'text-yellow-400 fill-current'
+                                                                                            : 'text-gray-600'
+                                                                                            }`}
+                                                                                    />
+                                                                                </button>
+                                                                            ))}
+                                                                        </>
+                                                                    ) : (
+                                                                        [...Array(comment.rating)].map((_, i) => (
+                                                                            <FaStar key={i} className="text-yellow-400 text-xs fill-current" />
+                                                                        ))
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {user && (user.id === comment.userId || user.role === 'admin') && (
-                                                        <button
-                                                            onClick={() => handleDeleteComment(comment._id)}
-                                                            className="text-gray-500 hover:text-red-400 transition-colors p-2"
-                                                            title="Delete comment"
-                                                        >
-                                                            <FaTrash className="text-sm" />
-                                                        </button>
+                                                    {user && (user.id === comment.userId || user.role === 'admin') && editingCommentId !== comment._id && (
+                                                        <div className="flex gap-2">
+                                                            <button
+                                                                onClick={() => startEditComment(comment)}
+                                                                className="text-gray-500 hover:text-cyan-400 transition-colors p-2"
+                                                                title="Edit comment"
+                                                            >
+                                                                <FaPenToSquare className="text-sm" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => openDeleteCommentModal(comment)}
+                                                                className="text-gray-500 hover:text-red-400 transition-colors p-2"
+                                                                title="Delete comment"
+                                                            >
+                                                                <FaTrash className="text-sm" />
+                                                            </button>
+                                                        </div>
                                                     )}
                                                 </div>
-                                                <p className="text-gray-300 leading-relaxed">{comment.text}</p>
+
+                                                {editingCommentId === comment._id ? (
+                                                    <div className="space-y-3">
+                                                        <textarea
+                                                            value={editCommentText}
+                                                            onChange={(e) => setEditCommentText(e.target.value)}
+                                                            className="w-full bg-[#0a0a0a] border border-cyan-500/30 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
+                                                            rows={3}
+                                                            maxLength={500}
+                                                        />
+                                                        <div className="flex items-center justify-between">
+                                                            <span className="text-xs text-gray-500">{editCommentText.length}/500 characters</span>
+                                                            <div className="flex gap-2">
+                                                                <button
+                                                                    onClick={cancelEditComment}
+                                                                    disabled={updatingComment}
+                                                                    className="px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50 flex items-center gap-2"
+                                                                >
+                                                                    <FaXmark /> Cancel
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleUpdateComment(comment._id)}
+                                                                    disabled={updatingComment || !editCommentText.trim()}
+                                                                    className="px-4 py-2 gradient-bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2"
+                                                                >
+                                                                    <FaPaperPlane className="text-sm" />
+                                                                    {updatingComment ? 'Updating...' : 'Update'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-gray-300 leading-relaxed">{comment.text}</p>
+                                                )}
                                             </div>
                                         ))
                                 ) : (
@@ -485,6 +603,19 @@ export default function AssetDetailsPage() {
                     </div>
                 </div>
             </div>
+
+            <DeleteConfirmModal
+                isOpen={deleteModalOpen}
+                onClose={() => {
+                    setDeleteModalOpen(false);
+                    setCommentToDelete(null);
+                }}
+                onConfirm={handleDeleteComment}
+                title="Delete Comment"
+                message="Do you really want to delete this comment?"
+                itemName={commentToDelete?.text?.substring(0, 50) + (commentToDelete?.text?.length > 50 ? '...' : '')}
+                isDeleting={deletingComment}
+            />
         </div>
     );
 }

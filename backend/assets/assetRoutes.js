@@ -11,7 +11,8 @@ const {
   deleteAsset,
   updateAsset,
   addComment,
-  deleteComment
+  deleteComment,
+  updateComment
 } = require('./assetController');
 const authMiddleware = require('../user/authMiddleware');
 
@@ -26,6 +27,7 @@ router.delete('/:id', authMiddleware, deleteAsset);
 router.post('/:id/favorite', authMiddleware, toggleFavorite);
 router.post('/:id/download', authMiddleware, recordDownload);
 router.post('/:id/comments', authMiddleware, addComment);
+router.put('/:id/comments/:commentId', authMiddleware, updateComment);
 router.delete('/:id/comments/:commentId', authMiddleware, deleteComment);
 
 module.exports = router;
