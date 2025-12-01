@@ -197,6 +197,68 @@ exports.deleteAsset = async (req, res) => {
   }
 };
 
+// @desc    Update asset
+// @route   PUT /api/assets/:id
+// @access  Private (Creator or Admin)
+exports.updateAsset = async (req, res) => {
+  try {
+    const assetId = req.params.id;
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+    const { title, description, category, price, imageUrl, fileUrl, tags } = req.body;
+
+    let asset = await Asset.findById(assetId);
+
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    // Check ownership
+    if (asset.creatorId) {
+        if (asset.creatorId.toString() !== userId && userRole !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to update this asset'
+            });
+        }
+    } else {
+        // Seeded asset
+        if (userRole !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Only admins can update seeded assets'
+            });
+        }
+    }
+
+    // Update fields
+    const updateData = {
+        title: title || asset.title,
+        description: description || asset.description,
+        category: category || asset.category,
+        price: price !== undefined ? price : asset.price,
+        imageUrl: imageUrl || asset.imageUrl,
+        fileUrl: fileUrl || asset.fileUrl,
+        tags: tags || asset.tags
+    };
+
+    asset = await Asset.findByIdAndUpdate(assetId, updateData, {
+        new: true,
+        runValidators: true
+    });
+
+    res.json({
+        success: true,
+        message: 'Asset updated successfully',
+        data: asset
+    });
+
+  } catch (err) {
+    console.error('Update asset error:', err);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
 // @desc    Toggle favorite
 // @route   POST /api/assets/:id/favorite
 // @access  Private
@@ -301,6 +363,15 @@ exports.incrementViews = async (req, res) => {
 // @access  Public (for dev)
 exports.seedAssets = async (req, res) => {
   try {
+    // Find admin user
+    const admin = await User.findOne({ role: 'admin' });
+    if (!admin) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Admin user not found. Please create an admin user first.' 
+      });
+    }
+
     await Asset.deleteMany();
 
     const dummyAssets = [
@@ -314,7 +385,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1612287230217-969b698c8d13?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["scifi", "weapon", "gun", "3d"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Low Poly Nature Kit",
@@ -326,7 +399,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1448375240586-dfd8f3793371?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["nature", "lowpoly", "environment"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Cyberpunk City Textures",
@@ -338,7 +413,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["cyberpunk", "texture", "city"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "RPG Fantasy UI Kit",
@@ -350,7 +427,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1614726365723-49cfae927832?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["ui", "rpg", "fantasy", "interface"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "8-Bit Retro Sound Effects",
@@ -362,7 +441,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["sound", "sfx", "retro", "8bit"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Ultimate FPS Controller",
@@ -374,7 +455,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["script", "fps", "controller", "code"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Magic Spells VFX",
@@ -386,7 +469,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["vfx", "magic", "particles"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Dungeon Ambient Music",
@@ -398,7 +483,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["music", "ambient", "dungeon"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Modern Apartment Interior",
@@ -410,7 +497,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["interior", "furniture", "modern"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Realistic Water Shader",
@@ -422,7 +511,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["shader", "water", "vfx"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Space Station Environment",
@@ -434,7 +525,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["scifi", "space", "environment"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Horror Sound Pack",
@@ -446,7 +539,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["horror", "sound", "scary"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Inventory System",
@@ -458,7 +553,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["inventory", "system", "script"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Pixel Art Characters",
@@ -470,7 +567,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["pixelart", "2d", "character"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Orchestral Epic Music",
@@ -482,7 +581,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384ebd?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["music", "orchestral", "epic"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       },
       {
         title: "Vehicle Physics Controller",
@@ -494,7 +595,9 @@ exports.seedAssets = async (req, res) => {
         imageUrl: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=800",
         fileUrl: "https://drive.google.com/drive/u/0/my-drive",
         tags: ["vehicle", "physics", "racing"],
-        approvalStatus: "approved"
+        approvalStatus: "approved",
+        author: admin.username,
+        creatorId: admin._id
       }
     ];
 

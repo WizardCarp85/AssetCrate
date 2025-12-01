@@ -21,7 +21,7 @@ export default function BrowsePage() {
     });
     const [showFilters, setShowFilters] = useState(false);
 
-    const categories = ['All', '3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI'];
+    const categories = ['All', '3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI', '2D'];
 
     useEffect(() => {
         fetchAssets();

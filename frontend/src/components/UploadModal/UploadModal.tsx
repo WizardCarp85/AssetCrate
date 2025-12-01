@@ -9,7 +9,7 @@ interface UploadModalProps {
     onSuccess: () => void;
 }
 
-export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
+export default function UploadModal({ isOpen, onClose, onSuccess, initialData }: { isOpen: boolean; onClose: () => void; onSuccess: () => void; initialData?: any }) {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -21,7 +21,19 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const categories = ['3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI'];
+    const categories = ['3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI', '2D'];
+
+    // Load initial data when modal opens or initialData changes
+    if (isOpen && initialData && formData.title === '' && !loading) {
+        setFormData({
+            title: initialData.title || '',
+            description: initialData.description || '',
+            category: initialData.category || '3D Models',
+            imageUrl: initialData.imageUrl || '',
+            fileUrl: initialData.fileUrl || '',
+            tags: initialData.tags ? initialData.tags.join(', ') : ''
+        });
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,8 +44,14 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
             const token = localStorage.getItem('token');
             const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets`, {
-                method: 'POST',
+            const url = initialData
+                ? `${process.env.NEXT_PUBLIC_API_URL}/api/assets/${initialData._id}`
+                : `${process.env.NEXT_PUBLIC_API_URL}/api/assets`;
+
+            const method = initialData ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method: method,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -59,10 +77,10 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
                 onSuccess();
                 onClose();
             } else {
-                setError(result.message || 'Upload failed');
+                setError(result.message || 'Operation failed');
             }
         } catch (err) {
-            setError('Failed to upload asset');
+            setError('Failed to save asset');
             console.error(err);
         } finally {
             setLoading(false);
@@ -76,7 +94,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
             <div className="bg-gradient-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold text-white">Upload Asset</h2>
+                    <h2 className="text-3xl font-bold text-white">{initialData ? 'Edit Asset' : 'Upload Asset'}</h2>
                     <button
                         onClick={onClose}
                         className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
@@ -86,7 +104,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
                 </div>
 
                 <p className="text-gray-400 mb-6">
-                    Your asset will be pending admin approval before appearing in the store.
+                    {initialData ? 'Update your asset details below.' : 'Your asset will be pending admin approval before appearing in the store.'}
                 </p>
 
                 {error && (
@@ -206,12 +224,12 @@ export default function UploadModal({ isOpen, onClose, onSuccess }: UploadModalP
                             {loading ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    Uploading...
+                                    {initialData ? 'Updating...' : 'Uploading...'}
                                 </>
                             ) : (
                                 <>
                                     <FaUpload />
-                                    Upload Asset
+                                    {initialData ? 'Update Asset' : 'Upload Asset'}
                                 </>
                             )}
                         </button>

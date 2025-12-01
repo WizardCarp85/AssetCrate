@@ -11,6 +11,8 @@ export default function CreatorDashboard() {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [deleting, setDeleting] = useState<string | null>(null);
 
+    const [editingAsset, setEditingAsset] = useState<any>(null);
+
     useEffect(() => {
         fetchDashboardData();
     }, []);
@@ -33,6 +35,11 @@ export default function CreatorDashboard() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleEditAsset = (asset: any) => {
+        setEditingAsset(asset);
+        setIsUploadModalOpen(true);
     };
 
     const handleDeleteAsset = async (assetId: string) => {
@@ -101,7 +108,10 @@ export default function CreatorDashboard() {
                             <p className="text-gray-400">Manage your uploaded assets and track performance</p>
                         </div>
                         <button
-                            onClick={() => setIsUploadModalOpen(true)}
+                            onClick={() => {
+                                setEditingAsset(null);
+                                setIsUploadModalOpen(true);
+                            }}
                             className="w-full sm:w-auto px-6 py-3 gradient-bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2"
                         >
                             <FaUpload />
@@ -204,11 +214,17 @@ export default function CreatorDashboard() {
                                                         </Link>
                                                     )}
                                                     <button
+                                                        onClick={() => handleEditAsset(asset)}
+                                                        className="px-3 sm:px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-xs sm:text-sm font-semibold flex items-center gap-2"
+                                                    >
+                                                        <FaPenToSquare /> Edit
+                                                    </button>
+                                                    <button
                                                         onClick={() => handleDeleteAsset(asset._id)}
                                                         disabled={deleting === asset._id}
-                                                        className="px-3 sm:px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-xs sm:text-sm font-semibold disabled:opacity-50"
+                                                        className="px-3 sm:px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-xs sm:text-sm font-semibold disabled:opacity-50 flex items-center gap-2"
                                                     >
-                                                        {deleting === asset._id ? 'Deleting...' : 'Delete'}
+                                                        <FaTrash /> {deleting === asset._id ? 'Deleting...' : 'Delete'}
                                                     </button>
                                                 </div>
                                             </div>
@@ -225,7 +241,10 @@ export default function CreatorDashboard() {
                             <h3 className="text-2xl font-bold text-white mb-4">No Assets Yet</h3>
                             <p className="text-gray-400 mb-8">Upload your first asset to start sharing with the community!</p>
                             <button
-                                onClick={() => setIsUploadModalOpen(true)}
+                                onClick={() => {
+                                    setEditingAsset(null);
+                                    setIsUploadModalOpen(true);
+                                }}
                                 className="inline-block px-8 py-4 gradient-bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/30"
                             >
                                 Upload Asset
@@ -239,6 +258,7 @@ export default function CreatorDashboard() {
                 isOpen={isUploadModalOpen}
                 onClose={() => setIsUploadModalOpen(false)}
                 onSuccess={fetchDashboardData}
+                initialData={editingAsset}
             />
         </>
     );

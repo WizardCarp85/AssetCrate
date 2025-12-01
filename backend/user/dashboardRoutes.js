@@ -6,7 +6,9 @@ const {
     getAdminDashboard,
     approveAsset,
     getAllUsers,
-    updateUserRole
+    updateUserRole,
+    getAdminAssets,
+    getPendingAssets
 } = require('./dashboardController');
 const authMiddleware = require('./authMiddleware');
 
@@ -30,5 +32,7 @@ router.get('/admin', authMiddleware, adminMiddleware, getAdminDashboard);
 router.put('/admin/asset/:assetId/approve', authMiddleware, adminMiddleware, approveAsset);
 router.get('/admin/users', authMiddleware, adminMiddleware, getAllUsers);
 router.put('/admin/user/:userId/role', authMiddleware, adminMiddleware, updateUserRole);
+router.get('/admin/assets', authMiddleware, adminMiddleware, getAdminAssets);
+router.get('/admin/pending-assets', authMiddleware, adminMiddleware, getPendingAssets);
 
 module.exports = router;

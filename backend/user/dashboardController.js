@@ -102,12 +102,17 @@ exports.getAdminDashboard = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(10);
 
+        const allAssets = await Asset.find()
+            .sort({ createdAt: -1 })
+            .limit(20); // Limit to 20 for now to avoid huge payload
+
         res.json({
             success: true,
             data: {
                 stats,
                 pendingAssets,
-                recentUsers
+                recentUsers,
+                allAssets
             }
         });
     } catch (error) {
@@ -208,6 +213,83 @@ exports.updateUserRole = async (req, res) => {
         });
     } catch (error) {
         console.error('Update user role error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+};
+
+// Get Admin Assets (Paginated)
+exports.getAdminAssets = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 8;
+        const sortParam = req.query.sort || 'newest';
+        const startIndex = (page - 1) * limit;
+
+        let sort = { createdAt: -1 };
+        if (sortParam === 'oldest') sort = { createdAt: 1 };
+        if (sortParam === 'a-z') sort = { title: 1 };
+        if (sortParam === 'z-a') sort = { title: -1 };
+        if (sortParam === 'downloads') sort = { downloads: -1 };
+        if (sortParam === 'rating') sort = { rating: -1 };
+
+        const total = await Asset.countDocuments();
+        
+        const assets = await Asset.find()
+            .sort(sort)
+            .skip(startIndex)
+            .limit(limit);
+
+        res.json({
+            success: true,
+            count: assets.length,
+            total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            data: assets
+        });
+    } catch (error) {
+        console.error('Get admin assets error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+};
+
+// Get Pending Assets (Paginated)
+exports.getPendingAssets = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 8;
+        const sortParam = req.query.sort || 'newest';
+        const startIndex = (page - 1) * limit;
+
+        let sort = { createdAt: -1 };
+        if (sortParam === 'oldest') sort = { createdAt: 1 };
+        if (sortParam === 'a-z') sort = { title: 1 };
+        if (sortParam === 'z-a') sort = { title: -1 };
+
+        const query = { approvalStatus: 'pending' };
+        const total = await Asset.countDocuments(query);
+        
+        const assets = await Asset.find(query)
+            .sort(sort)
+            .skip(startIndex)
+            .limit(limit);
+
+        res.json({
+            success: true,
+            count: assets.length,
+            total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            data: assets
+        });
+    } catch (error) {
+        console.error('Get pending assets error:', error);
         res.status(500).json({
             success: false,
             message: 'Server error'

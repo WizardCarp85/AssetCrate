@@ -15,7 +15,7 @@ const assetSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Please select a category'],
-    enum: ['3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI']
+    enum: ['3D Models', 'Textures', 'Sounds', 'Scripts', 'VFX', 'UI', '2D']
   },
   price: {
     type: Number,

@@ -1,6 +1,6 @@
 # AssetCrate
 
-A simple hub for sharing and discovering game assets like models, textures, sounds, and scripts.
+A simple hub for sharing and discovering free game assets like models, textures, sounds, and scripts.
 
 ## Problem
 Developers struggle to find free or reliable assets, while creators lack a place to showcase their work.  
@@ -38,6 +38,18 @@ AssetCrate connects both sides in one platform.
 - `POST /api/auth/signup` — Register user  
 - `POST /api/auth/login` — Login user  
 
+### Assets
+- `GET /api/assets` — Get all assets (supports filtering, sorting, pagination)
+- `GET /api/assets/:id` — Get single asset details
+- `POST /api/assets` — Upload new asset (Creator/Admin only)
+- `PUT /api/assets/:id` — Update asset (Creator/Admin only)
+- `DELETE /api/assets/:id` — Delete asset (Creator/Admin only)
+
+### Dashboard
+- `GET /api/dashboard/admin` — Get admin stats and pending assets
+- `GET /api/dashboard/creator` — Get creator stats and uploads
+- `GET /api/dashboard/developer` — Get user stats and downloads  
+
 ## User Roles
 - **User**: Can download and favorite assets
 - **Creator**: Can download, upload, and manage their own assets
@@ -50,3 +62,9 @@ AssetCrate connects both sides in one platform.
 - **Asset Detail** (`/asset/:id`) - Individual asset page with download link
 - **Profile** (`/profile`) - User profile with editable information
 - **Login/Signup** - Authentication pages
+
+## Hosted Urls
+
+- **Frontend** - https://asset-crate.vercel.app/
+- **Backend** - https://assetcrate.onrender.com
+- **Database** - https://cloud.mongodb.com/v2/69298aac7595835ba3f18b10#/clusters/detail/AsssetCrate
