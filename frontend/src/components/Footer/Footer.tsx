@@ -8,8 +8,8 @@ export default function Footer() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-8 gradient-bg-primary rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold">A</span>
+                            <div className="w-8 h-8 flex items-center justify-center">
+                                <img src="/icon.png" alt="AssetCrate Logo" className="w-full h-full object-contain" />
                             </div>
                             <span className="text-xl font-bold text-white">AssetCrate</span>
                         </div>

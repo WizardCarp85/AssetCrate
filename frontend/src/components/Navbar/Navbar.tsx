@@ -52,8 +52,8 @@ export default function Navbar() {
                 <div className="container-custom">
                     <div className="flex items-center justify-between">
                         <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-                            <div className="w-9 h-9 sm:w-10 sm:h-10 gradient-bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
-                                <span className="text-white font-bold text-lg sm:text-xl">A</span>
+                            <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center transition-all duration-300">
+                                <img src="/icon.png" alt="AssetCrate Logo" className="w-full h-full object-contain" />
                             </div>
                             <span className="text-lg sm:text-xl font-bold text-white tracking-tight">AssetCrate</span>
                         </Link>
