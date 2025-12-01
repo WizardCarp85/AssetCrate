@@ -45,7 +45,7 @@ export default function AssetReviewModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="bg-gradient-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="bg-linear-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-3xl font-bold text-white">Review Asset</h2>
@@ -60,11 +60,11 @@ export default function AssetReviewModal({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Left Column - Image Preview */}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                        <label className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
                             <FaImage className="text-cyan-400" />
                             Preview Image
                         </label>
-                        <div className="aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-white/10 flex items-center justify-center">
+                        <div className="aspect-video rounded-2xl overflow-hidden bg-linear-to-br from-cyan-500/10 to-blue-500/10 border border-white/10 flex items-center justify-center">
                             {!imageError ? (
                                 <img
                                     src={asset.imageUrl}
@@ -84,7 +84,7 @@ export default function AssetReviewModal({
 
                         {/* Download Link Test */}
                         <div className="mt-6">
-                            <label className="block text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                            <label className=" text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
                                 <FaLink className="text-cyan-400" />
                                 Download Link
                             </label>
@@ -124,7 +124,7 @@ export default function AssetReviewModal({
 
                         {/* Creator */}
                         <div>
-                            <label className="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                            <label className=" text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                                 <FaUser className="text-cyan-400" />
                                 Created By
                             </label>
@@ -146,7 +146,7 @@ export default function AssetReviewModal({
                         {/* Tags */}
                         {asset.tags && asset.tags.length > 0 && (
                             <div>
-                                <label className="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                                <label className=" text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                                     <FaTags className="text-cyan-400" />
                                     Tags
                                 </label>

@@ -45,7 +45,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-[#050505]">
         {/* Animated Background Grid */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
         {/* Vibrant Floating Orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/30 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
@@ -267,7 +267,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
             {/* Connecting Line Background */}
-            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-linear-to-r from-transparent via-cyan-500/30 to-transparent"></div>
 
             {[
               {
@@ -305,7 +305,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-32 relative overflow-hidden bg-black border-t border-white/5">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent to-black/80"></div>
 
         <div className="container-custom relative z-10">
           <div className="max-w-4xl mx-auto text-center">

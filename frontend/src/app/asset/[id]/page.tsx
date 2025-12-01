@@ -19,6 +19,7 @@ export default function AssetDetailsPage() {
     useEffect(() => {
         if (params.id) {
             fetchAsset();
+            incrementViews();
         }
         // Check if user is logged in
         const userStr = localStorage.getItem('user');
@@ -38,6 +39,52 @@ export default function AssetDetailsPage() {
             console.error('Error fetching asset:', err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const incrementViews = async () => {
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/view`, {
+                method: 'POST'
+            });
+        } catch (err) {
+            console.error('Error incrementing views:', err);
+        }
+    };
+
+    const handleDownload = async (e: React.MouseEvent) => {
+        e.preventDefault();
+
+        // Open file immediately to prevent popup blocker issues if possible, 
+        // but we need to record download first or in parallel.
+        // Best practice: Open window first, then record.
+        window.open(asset.fileUrl, '_blank');
+
+        try {
+            const token = localStorage.getItem('token');
+            // Only record if logged in? The backend requires auth for recordDownload.
+            // If public download is allowed, backend needs update. 
+            // Assuming auth is required for tracking user downloads, but maybe not for count?
+            // Checking backend: recordDownload uses req.user.userId. So user MUST be logged in.
+
+            if (user && token) {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assets/${params.id}/download`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Update local state to show new download count immediately
+                    setAsset((prev: any) => ({
+                        ...prev,
+                        downloads: data.downloads
+                    }));
+                }
+            }
+        } catch (err) {
+            console.error('Error recording download:', err);
         }
     };
 
@@ -143,7 +190,7 @@ export default function AssetDetailsPage() {
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
             {/* Animated Background */}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -164,26 +211,18 @@ export default function AssetDetailsPage() {
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Preview Image */}
-                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 shadow-2xl shadow-cyan-500/10 group">
+                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-linear-to-br from-cyan-900/20 to-blue-900/20 shadow-2xl shadow-cyan-500/10 group">
                             <img
                                 src={asset.imageUrl}
                                 alt={asset.title}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    target.style.display = 'none';
-                                    target.parentElement!.innerHTML = `
-                                    <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-900/40 via-blue-900/30 to-blue-900/40 relative overflow-hidden">
-                                      <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.05) 20px, rgba(255,255,255,.05) 40px);"></div>
-                                      <div class="relative z-10 text-center">
-                                        <div class="text-white/90 text-2xl font-bold mb-3">Preview Unavailable</div>
-                                        <div class="text-gray-400 text-base">The asset preview image could not be loaded</div>
-                                      </div>
-                                    </div>
-                                  `;
+                                    target.src = '/PreviewUnavailable.png'; // Fallback image
+                                    target.onerror = null; // Prevent infinite loop if fallback fails
                                 }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
                             {/* Category Badge */}
                             <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold text-white border border-white/20">
@@ -192,14 +231,14 @@ export default function AssetDetailsPage() {
 
                             {/* Free Badge */}
                             {asset.price === 0 && (
-                                <div className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-lg">
+                                <div className="absolute top-4 right-4 bg-linear-to-r from-green-500 to-emerald-500 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-lg">
                                     FREE
                                 </div>
                             )}
                         </div>
 
                         {/* Description Card */}
-                        <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="w-10 h-10 rounded-xl gradient-bg-secondary flex items-center justify-center">
                                     <FaFileLines className="text-white text-lg" />
@@ -212,7 +251,7 @@ export default function AssetDetailsPage() {
                         </div>
 
                         {/* Tags */}
-                        <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <h3 className="text-xl font-bold text-white mb-4">Tags</h3>
                             <div className="flex flex-wrap gap-2">
                                 {asset.tags.map((tag: string) => (
@@ -228,26 +267,26 @@ export default function AssetDetailsPage() {
 
                         {/* Stats Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
+                            <div className="bg-linear-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
                                 <div className="text-3xl font-bold gradient-text mb-1">{asset.rating}</div>
                                 <div className="text-sm text-gray-400">Rating</div>
                             </div>
-                            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
+                            <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 text-center">
                                 <div className="text-3xl font-bold text-cyan-400 mb-1">{asset.downloads >= 1000 ? `${(asset.downloads / 1000).toFixed(1)}k` : asset.downloads}</div>
                                 <div className="text-sm text-gray-400">Downloads</div>
                             </div>
-                            <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl p-6 rounded-2xl border border-green-500/20 text-center">
+                            <div className="bg-linear-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl p-6 rounded-2xl border border-green-500/20 text-center">
                                 <div className="text-3xl font-bold text-green-400 mb-1">245 MB</div>
                                 <div className="text-sm text-gray-400">File Size</div>
                             </div>
-                            <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 backdrop-blur-xl p-6 rounded-2xl border border-orange-500/20 text-center">
+                            <div className="bg-linear-to-br from-orange-500/10 to-yellow-500/10 backdrop-blur-xl p-6 rounded-2xl border border-orange-500/20 text-center">
                                 <div className="text-3xl font-bold text-orange-400 mb-1">v1.0</div>
                                 <div className="text-sm text-gray-400">Version</div>
                             </div>
                         </div>
 
                         {/* Comments Section */}
-                        <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="w-10 h-10 rounded-xl gradient-bg-secondary flex items-center justify-center">
                                     <FaComments className="text-white text-lg" />
@@ -284,8 +323,8 @@ export default function AssetDetailsPage() {
                                                 >
                                                     <FaStar
                                                         className={`text-2xl ${star <= commentRating
-                                                                ? 'text-yellow-400 fill-current'
-                                                                : 'text-gray-600'
+                                                            ? 'text-yellow-400 fill-current'
+                                                            : 'text-gray-600'
                                                             }`}
                                                     />
                                                 </button>
@@ -339,7 +378,7 @@ export default function AssetDetailsPage() {
                                             >
                                                 <div className="flex items-start justify-between mb-3">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
+                                                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
                                                             {comment.username?.charAt(0).toUpperCase() || 'U'}
                                                         </div>
                                                         <div>
@@ -381,7 +420,7 @@ export default function AssetDetailsPage() {
                     {/* Sidebar */}
                     <div className="space-y-6">
                         {/* Main Info Card */}
-                        <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl p-8 rounded-2xl border border-white/10 sticky top-32 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl p-8 rounded-2xl border border-white/10 sticky top-32 shadow-2xl">
                             <h1 className="text-3xl font-bold text-white mb-6 leading-tight">{asset.title}</h1>
 
                             {/* Author */}
@@ -411,15 +450,13 @@ export default function AssetDetailsPage() {
                             </div>
 
                             {/* Download Button */}
-                            <a
-                                href={asset.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                onClick={handleDownload}
                                 className="w-full py-4 gradient-bg-primary text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all hover:shadow-cyan-500/50 hover:-translate-y-1 flex items-center justify-center gap-3 mb-4 group text-lg"
                             >
                                 <FaDownload className="group-hover:animate-bounce" />
                                 {asset.price === 0 ? 'Download Now' : 'Buy Now'}
-                            </a>
+                            </button>
 
                             {/* Action Buttons */}
                             <div className="grid grid-cols-2 gap-3 mb-6">

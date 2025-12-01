@@ -104,17 +104,17 @@ export default function ProfilePage() {
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 relative overflow-hidden">
             {/* Animated Background */}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             <div className="container-custom relative z-10 max-w-5xl">
                 {/* Header Section */}
-                <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-3xl border border-white/10 p-8 md:p-12 mb-8 shadow-2xl">
+                <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-3xl border border-white/10 p-8 md:p-12 mb-8 shadow-2xl">
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                         {/* Avatar */}
                         <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-linear-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
                             <div className="relative w-32 h-32 rounded-full gradient-bg-primary p-1">
                                 <div className="w-full h-full rounded-full bg-[#0a0a0a] flex items-center justify-center">
                                     <span className="text-4xl font-bold text-white">{getInitials(user.username)}</span>
@@ -123,7 +123,7 @@ export default function ProfilePage() {
                         </div>
 
                         {/* User Info */}
-                        <div className="flex-grow text-center md:text-left">
+                        <div className="grow text-center md:text-left">
                             <h1 className="text-4xl font-bold text-white mb-2">{user.username}</h1>
                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-4">
                                 <div className="flex items-center gap-2 text-gray-400">
@@ -161,7 +161,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* About Section */}
-                <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-3xl border border-white/10 p-8 mb-8 shadow-2xl">
+                <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-3xl border border-white/10 p-8 mb-8 shadow-2xl">
                     <h2 className="text-2xl font-bold text-white mb-6">About Me</h2>
 
                     {isEditing ? (

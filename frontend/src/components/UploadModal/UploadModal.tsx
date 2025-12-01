@@ -91,7 +91,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="bg-gradient-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="bg-linear-to-br from-[#111]/95 to-[#0a0a0a]/95 backdrop-blur-xl rounded-3xl border border-white/10 p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-3xl font-bold text-white">{initialData ? 'Edit Asset' : 'Upload Asset'}</h2>
@@ -162,7 +162,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
 
                     {/* Image URL */}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                        <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaImage className="text-cyan-400" />
                             Preview Image URL *
                         </label>
@@ -178,7 +178,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
 
                     {/* File URL */}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                        <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaLink className="text-cyan-400" />
                             Download Link *
                         </label>
@@ -194,7 +194,7 @@ export default function UploadModal({ isOpen, onClose, onSuccess, initialData }:
 
                     {/* Tags */}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                        <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
                             <FaTags className="text-cyan-400" />
                             Tags (comma separated)
                         </label>

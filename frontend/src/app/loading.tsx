@@ -12,7 +12,7 @@ export default function Loading() {
 
                 {/* Loading Bar */}
                 <div className="w-48 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 animate-loading-bar"></div>
+                    <div className="h-full bg-linear-to-r from-cyan-500 to-blue-500 animate-loading-bar"></div>
                 </div>
 
                 <p className="mt-4 text-gray-400 text-sm font-medium animate-pulse">Loading AssetCrate...</p>

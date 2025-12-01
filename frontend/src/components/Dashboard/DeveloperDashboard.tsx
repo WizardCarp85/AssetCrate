@@ -53,7 +53,7 @@ export default function DeveloperDashboard() {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-12">
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 rounded-xl gradient-bg-primary flex items-center justify-center">
                                 <FaDownload className="text-white text-xl" />
@@ -63,9 +63,9 @@ export default function DeveloperDashboard() {
                         <h3 className="text-gray-400 font-semibold">Total Downloads</h3>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-pink-500 to-red-500 flex items-center justify-center">
                                 <FaHeart className="text-white text-xl" />
                             </div>
                             <span className="text-3xl font-bold text-white">{data?.stats.totalFavorites || 0}</span>
@@ -83,9 +83,9 @@ export default function DeveloperDashboard() {
                                 <Link
                                     key={asset._id}
                                     href={`/asset/${asset._id}`}
-                                    className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1 group"
+                                    className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1 group"
                                 >
-                                    <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-blue-500/10 flex items-center justify-center">
+                                    <div className="aspect-video bg-linear-to-br from-cyan-500/10 to-blue-500/10 flex items-center justify-center">
                                         <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="p-6">
@@ -111,9 +111,9 @@ export default function DeveloperDashboard() {
                                 <Link
                                     key={asset._id}
                                     href={`/asset/${asset._id}`}
-                                    className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1 group"
+                                    className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1 group"
                                 >
-                                    <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-blue-500/10 flex items-center justify-center">
+                                    <div className="aspect-video bg-linear-to-br from-cyan-500/10 to-blue-500/10 flex items-center justify-center">
                                         <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="p-6">

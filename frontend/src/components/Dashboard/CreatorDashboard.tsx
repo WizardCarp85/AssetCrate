@@ -121,7 +121,7 @@ export default function CreatorDashboard() {
 
                     {/* Stats Cards */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
-                        <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
                                 <div className="w-10 h-10 rounded-lg gradient-bg-primary flex items-center justify-center">
                                     <FaUpload className="text-white" />
@@ -131,9 +131,9 @@ export default function CreatorDashboard() {
                             <h3 className="text-gray-400 text-sm font-semibold">Total Uploads</h3>
                         </div>
 
-                        <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-500 to-emerald-500 flex items-center justify-center">
                                     <FaCircleCheck className="text-white" />
                                 </div>
                                 <span className="text-2xl font-bold text-white">{data?.stats.approved || 0}</span>
@@ -141,9 +141,9 @@ export default function CreatorDashboard() {
                             <h3 className="text-gray-400 text-sm font-semibold">Approved</h3>
                         </div>
 
-                        <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
                                     <FaClock className="text-white" />
                                 </div>
                                 <span className="text-2xl font-bold text-white">{data?.stats.pendingApproval || 0}</span>
@@ -151,9 +151,9 @@ export default function CreatorDashboard() {
                             <h3 className="text-gray-400 text-sm font-semibold">Pending</h3>
                         </div>
 
-                        <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                        <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                             <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center">
                                     <FaDownload className="text-white" />
                                 </div>
                                 <span className="text-2xl font-bold text-white">{data?.stats.totalDownloads || 0}</span>
@@ -170,10 +170,10 @@ export default function CreatorDashboard() {
                                 {data.assets.map((asset: any) => (
                                     <div
                                         key={asset._id}
-                                        className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/50 transition-all duration-300"
+                                        className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/50 transition-all duration-300"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
+                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex-grow">

@@ -62,7 +62,7 @@ export default function BrowsePage() {
     return (
         <div className="min-h-screen bg-[#050505] relative overflow-hidden">
             {/* Animated Background */}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -86,8 +86,8 @@ export default function BrowsePage() {
 
                         {/* Search Bar - Enhanced */}
                         <div className="relative max-w-2xl mx-auto group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                            <div className="relative bg-[#0a0a0a] rounded-2xl p-[2px] shadow-2xl">
+                            <div className="absolute inset-0 bg-linear-to-r from-cyan-600 via-blue-600 to-blue-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                            <div className="relative bg-[#0a0a0a] rounded-2xl p-0.5 shadow-2xl">
                                 <div className="bg-[#111] rounded-2xl flex items-center overflow-hidden">
                                     <div className="pl-4 sm:pl-6 pr-3 sm:pr-4 text-gray-500 group-hover:text-cyan-400 transition-colors">
                                         <FaMagnifyingGlass className="text-lg sm:text-xl" />
@@ -146,9 +146,9 @@ export default function BrowsePage() {
 
                     <div className="flex flex-col lg:flex-row gap-8">
                         {/* Sidebar Filters - Improved */}
-                        <aside className={`w-full lg:w-72 flex-shrink-0 space-y-6 animate-slide-up ${showFilters ? 'block' : 'hidden lg:block'}`}>
+                        <aside className={`w-full lg:w-72 shrink-0 space-y-6 animate-slide-up ${showFilters ? 'block' : 'hidden lg:block'}`}>
                             {/* Categories */}
-                            <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
+                            <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
                                 <h3 className="text-white font-bold mb-5 flex items-center gap-2 text-lg">
                                     <div className="w-8 h-8 rounded-lg gradient-bg-secondary flex items-center justify-center">
                                         <FaFilter className="text-white text-sm" />
@@ -176,7 +176,7 @@ export default function BrowsePage() {
                             </div>
 
                             {/* Sort */}
-                            <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
+                            <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
                                 <h3 className="text-white font-bold mb-5 flex items-center gap-2 text-lg">
                                     <div className="w-8 h-8 rounded-lg gradient-bg-secondary flex items-center justify-center">
                                         <FaSort className="text-white text-sm" />
@@ -205,7 +205,7 @@ export default function BrowsePage() {
                             </div>
 
                             {/* Stats Card */}
-                            <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 shadow-2xl">
+                            <div className="bg-linear-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 shadow-2xl">
                                 <div className="text-center">
                                     <div className="text-4xl font-bold gradient-text mb-2">{totalAssets}</div>
                                     <div className="text-sm text-gray-400">Total Assets</div>
@@ -214,7 +214,7 @@ export default function BrowsePage() {
                         </aside>
 
                         {/* Asset Grid - Improved */}
-                        <div className="flex-grow">
+                        <div className="grow">
                             {/* Results Header */}
                             <div className="flex items-center justify-between mb-6">
                                 <div>
@@ -230,8 +230,8 @@ export default function BrowsePage() {
                             {loading ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {[1, 2, 3, 4, 5, 6].map(i => (
-                                        <div key={i} className="h-80 bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl animate-pulse border border-white/5 relative overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+                                        <div key={i} className="h-80 bg-linear-to-br from-[#111] to-[#0a0a0a] rounded-2xl animate-pulse border border-white/5 relative overflow-hidden">
+                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
                                         </div>
                                     ))}
                                 </div>
@@ -309,7 +309,7 @@ export default function BrowsePage() {
                                     )}
                                 </>
                             ) : (
-                                <div className="text-center py-32 bg-gradient-to-br from-[#111]/50 to-[#0a0a0a]/50 rounded-3xl border border-white/10 backdrop-blur-sm">
+                                <div className="text-center py-32 bg-linear-to-br from-[#111]/50 to-[#0a0a0a]/50 rounded-3xl border border-white/10 backdrop-blur-sm">
                                     <FaBoxOpen className="text-7xl mb-6 opacity-50 mx-auto text-gray-500" />
                                     <h3 className="text-2xl font-bold text-white mb-2">No assets found</h3>
                                     <p className="text-gray-400 mb-6">Try adjusting your search or filters</p>

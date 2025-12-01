@@ -46,7 +46,11 @@ AssetCrate connects both sides in one platform.
 - `DELETE /api/assets/:id` — Delete asset (Creator/Admin only)
 
 ### Dashboard
-- `GET /api/dashboard/admin` — Get admin stats and pending assets
+- `GET /api/dashboard/admin` — Get admin stats
+- `GET /api/dashboard/admin/assets` — Get all assets (paginated, sorted)
+- `GET /api/dashboard/admin/pending-assets` — Get pending assets (paginated, sorted)
+- `PUT /api/dashboard/admin/asset/:assetId/approve` — Approve/Reject asset
+- `PUT /api/dashboard/admin/user/:userId/role` — Update user role
 - `GET /api/dashboard/creator` — Get creator stats and uploads
 - `GET /api/dashboard/developer` — Get user stats and downloads  
 

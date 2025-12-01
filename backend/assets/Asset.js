@@ -47,7 +47,7 @@ const assetSchema = new mongoose.Schema({
   approvalStatus: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],
-    default: 'approved' // Default for seeded assets
+    default: 'approved'
   },
   rejectionReason: {
     type: String,
@@ -55,7 +55,7 @@ const assetSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    default: 'https://via.placeholder.com/400x300'
+    default: 'https://via.placeholder.com/300'
   },
   fileUrl: {
     type: String,

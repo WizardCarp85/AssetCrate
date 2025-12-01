@@ -181,7 +181,7 @@ export default function AdminDashboard() {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-3">
                             <div className="w-10 h-10 rounded-lg gradient-bg-primary flex items-center justify-center">
                                 <FaUsers className="text-white" />
@@ -191,9 +191,9 @@ export default function AdminDashboard() {
                         <h3 className="text-gray-400 text-sm font-semibold">Total Users</h3>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-3">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-lg bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center">
                                 <FaBoxOpen className="text-white" />
                             </div>
                             <span className="text-2xl font-bold text-white">{data?.stats.totalAssets || 0}</span>
@@ -201,9 +201,9 @@ export default function AdminDashboard() {
                         <h3 className="text-gray-400 text-sm font-semibold">Total Assets</h3>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-3">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-lg bg-linear-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
                                 <FaClock className="text-white" />
                             </div>
                             <span className="text-2xl font-bold text-white">{data?.stats.pendingApprovals || 0}</span>
@@ -211,9 +211,9 @@ export default function AdminDashboard() {
                         <h3 className="text-gray-400 text-sm font-semibold">Pending Approvals</h3>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+                    <div className="bg-linear-to-br from-[#111]/90 to-[#0a0a0a]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-3">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-500 to-emerald-500 flex items-center justify-center">
                                 <FaUserShield className="text-white" />
                             </div>
                             <span className="text-2xl font-bold text-white">{data?.stats.usersByRole?.admin || 0}</span>
@@ -254,10 +254,10 @@ export default function AdminDashboard() {
                                 {pendingAssets.map((asset: any) => (
                                     <div
                                         key={asset._id}
-                                        className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-yellow-500/30 p-4 sm:p-6"
+                                        className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-yellow-500/30 p-4 sm:p-6"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
+                                            <div className="w-full sm:w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex-grow">
@@ -366,10 +366,10 @@ export default function AdminDashboard() {
                                 {allAssets.map((asset: any) => (
                                     <div
                                         key={asset._id}
-                                        className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/30 transition-all"
+                                        className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 hover:border-cyan-500/30 transition-all"
                                     >
                                         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                                            <div className="w-full sm:w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
+                                            <div className="w-full sm:w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-linear-to-br from-cyan-500/10 to-blue-500/10">
                                                 <img src={asset.imageUrl} alt={asset.title} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex-grow">
@@ -433,7 +433,7 @@ export default function AdminDashboard() {
                 {data?.recentUsers && data.recentUsers.length > 0 && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-bold text-white mb-6">Recent Users</h2>
-                        <div className="bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+                        <div className="bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[600px]">
                                     <thead className="bg-white/5 border-b border-white/10">
@@ -471,7 +471,7 @@ export default function AdminDashboard() {
 
                 {/* Empty State */}
                 {(!pendingAssets || pendingAssets.length === 0) && (!allAssets || allAssets.length === 0) && (
-                    <div className="text-center py-12 bg-gradient-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10">
+                    <div className="text-center py-12 bg-linear-to-br from-[#111]/80 to-[#0a0a0a]/80 backdrop-blur-xl rounded-2xl border border-white/10">
                         <FaCircleCheck className="text-5xl text-green-500 mx-auto mb-4" />
                         <h3 className="text-xl font-bold text-white mb-2">All Caught Up!</h3>
                         <p className="text-gray-400">No pending asset approvals at the moment.</p>

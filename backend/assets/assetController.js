@@ -1,48 +1,35 @@
 const Asset = require('./Asset');
 const User = require('../user/User');
+const seedAssets = require('./seedData');
 
-// @desc    Get all assets with filtering, sorting, and pagination
-// @route   GET /api/assets
-// @access  Public
 exports.getAssets = async (req, res) => {
   try {
     let query;
-
-    // Copy req.query
     const reqQuery = { ...req.query };
-
-    // Fields to exclude
+    
     const removeFields = ['select', 'sort', 'page', 'limit', 'search'];
 
-    // Loop over removeFields and delete them from reqQuery
     removeFields.forEach(param => delete reqQuery[param]);
 
-    // Create query string
     let queryStr = JSON.stringify(reqQuery);
 
-    // Create operators ($gt, $gte, etc)
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    // Finding resource
     let mongoQuery = JSON.parse(queryStr);
 
-    // Only show approved assets for public browse
     mongoQuery.approvalStatus = 'approved';
 
-    // Search functionality
     if (req.query.search) {
       mongoQuery.title = { $regex: req.query.search, $options: 'i' };
     }
 
     query = Asset.find(mongoQuery);
 
-    // Select Fields
     if (req.query.select) {
       const fields = req.query.select.split(',').join(' ');
       query = query.select(fields);
     }
 
-    // Sort
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy);
@@ -50,7 +37,6 @@ exports.getAssets = async (req, res) => {
       query = query.sort('-createdAt');
     }
 
-    // Pagination
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 12;
     const startIndex = (page - 1) * limit;
@@ -59,10 +45,8 @@ exports.getAssets = async (req, res) => {
 
     query = query.skip(startIndex).limit(limit);
 
-    // Executing query
     const assets = await query;
 
-    // Pagination result
     const pagination = {};
 
     if (endIndex < total) {
@@ -92,9 +76,6 @@ exports.getAssets = async (req, res) => {
   }
 };
 
-// @desc    Get single asset
-// @route   GET /api/assets/:id
-// @access  Public
 exports.getAssetById = async (req, res) => {
   try {
     const asset = await Asset.findById(req.params.id);
@@ -113,15 +94,11 @@ exports.getAssetById = async (req, res) => {
   }
 };
 
-// @desc    Upload new asset
-// @route   POST /api/assets
-// @access  Private (Creator only)
 exports.uploadAsset = async (req, res) => {
   try {
     const { title, description, category, price, imageUrl, fileUrl, tags } = req.body;
     const userId = req.user.userId;
 
-    // Get user to get username for author field
     const user = await User.findById(userId);
 
     const asset = await Asset.create({
@@ -148,9 +125,6 @@ exports.uploadAsset = async (req, res) => {
   }
 };
 
-// @desc    Delete asset (Creator can delete their own, Admin can delete any)
-// @route   DELETE /api/assets/:id
-// @access  Private
 exports.deleteAsset = async (req, res) => {
   try {
     const assetId = req.params.id;
@@ -166,8 +140,6 @@ exports.deleteAsset = async (req, res) => {
       });
     }
 
-    // Check if user is the creator or an admin
-    // If asset has no creatorId (seeded assets), only admin can delete
     if (asset.creatorId) {
       if (asset.creatorId.toString() !== userId && userRole !== 'admin') {
         return res.status(403).json({
@@ -176,7 +148,6 @@ exports.deleteAsset = async (req, res) => {
         });
       }
     } else {
-      // No creatorId means it's a seeded asset, only admin can delete
       if (userRole !== 'admin') {
         return res.status(403).json({
           success: false,
@@ -197,9 +168,6 @@ exports.deleteAsset = async (req, res) => {
   }
 };
 
-// @desc    Update asset
-// @route   PUT /api/assets/:id
-// @access  Private (Creator or Admin)
 exports.updateAsset = async (req, res) => {
   try {
     const assetId = req.params.id;
@@ -213,7 +181,6 @@ exports.updateAsset = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Asset not found' });
     }
 
-    // Check ownership
     if (asset.creatorId) {
         if (asset.creatorId.toString() !== userId && userRole !== 'admin') {
             return res.status(403).json({
@@ -222,7 +189,6 @@ exports.updateAsset = async (req, res) => {
             });
         }
     } else {
-        // Seeded asset
         if (userRole !== 'admin') {
             return res.status(403).json({
                 success: false,
@@ -231,7 +197,6 @@ exports.updateAsset = async (req, res) => {
         }
     }
 
-    // Update fields
     const updateData = {
         title: title || asset.title,
         description: description || asset.description,
@@ -259,9 +224,6 @@ exports.updateAsset = async (req, res) => {
   }
 };
 
-// @desc    Toggle favorite
-// @route   POST /api/assets/:id/favorite
-// @access  Private
 exports.toggleFavorite = async (req, res) => {
   try {
     const assetId = req.params.id;
@@ -277,10 +239,10 @@ exports.toggleFavorite = async (req, res) => {
     const isFavorited = user.favorites.includes(assetId);
 
     if (isFavorited) {
-      // Remove from favorites
+
       user.favorites = user.favorites.filter(id => id.toString() !== assetId);
     } else {
-      // Add to favorites
+
       user.favorites.push(assetId);
     }
 
@@ -297,9 +259,7 @@ exports.toggleFavorite = async (req, res) => {
   }
 };
 
-// @desc    Record download
-// @route   POST /api/assets/:id/download
-// @access  Private
+
 exports.recordDownload = async (req, res) => {
   try {
     const assetId = req.params.id;
@@ -310,11 +270,9 @@ exports.recordDownload = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Asset not found' });
     }
 
-    // Increment download count
     asset.downloads += 1;
     await asset.save();
 
-    // Add to user's download history
     const user = await User.findById(userId);
     user.downloads.push({
       assetId,
@@ -333,9 +291,6 @@ exports.recordDownload = async (req, res) => {
   }
 };
 
-// @desc    Increment views
-// @route   POST /api/assets/:id/view
-// @access  Public
 exports.incrementViews = async (req, res) => {
   try {
     const assetId = req.params.id;
@@ -358,12 +313,8 @@ exports.incrementViews = async (req, res) => {
   }
 };
 
-// @desc    Seed assets
-// @route   POST /api/assets/seed
-// @access  Public (for dev)
 exports.seedAssets = async (req, res) => {
   try {
-    // Find admin user
     const admin = await User.findOne({ role: 'admin' });
     if (!admin) {
       return res.status(404).json({ 
@@ -374,239 +325,19 @@ exports.seedAssets = async (req, res) => {
 
     await Asset.deleteMany();
 
-    const dummyAssets = [
-      {
-        title: "Sci-Fi Weapon Pack",
-        description: "A collection of 10 high-quality sci-fi weapons including rifles, pistols, and energy blasters. PBR textures included.",
-        category: "3D Models",
-        price: 0,
-        rating: 4.8,
-        downloads: 1250,
-        imageUrl: "https://images.unsplash.com/photo-1612287230217-969b698c8d13?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["scifi", "weapon", "gun", "3d"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Low Poly Nature Kit",
-        description: "Everything you need to create beautiful low poly environments. Trees, rocks, grass, and terrain assets.",
-        category: "3D Models",
-        price: 0,
-        rating: 4.5,
-        downloads: 3400,
-        imageUrl: "https://images.unsplash.com/photo-1448375240586-dfd8f3793371?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["nature", "lowpoly", "environment"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Cyberpunk City Textures",
-        description: "Seamless 4K textures for cyberpunk and sci-fi environments. Neon signs, concrete, metal, and more.",
-        category: "Textures",
-        price: 0,
-        rating: 4.9,
-        downloads: 890,
-        imageUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["cyberpunk", "texture", "city"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "RPG Fantasy UI Kit",
-        description: "Complete UI kit for RPG games. Buttons, panels, icons, and HUD elements in a fantasy style.",
-        category: "UI",
-        price: 0,
-        rating: 4.7,
-        downloads: 2100,
-        imageUrl: "https://images.unsplash.com/photo-1614726365723-49cfae927832?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["ui", "rpg", "fantasy", "interface"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "8-Bit Retro Sound Effects",
-        description: "Over 200 retro sound effects for platformers and arcade games. Jumps, coins, explosions, and powerups.",
-        category: "Sounds",
-        price: 0,
-        rating: 4.6,
-        downloads: 5600,
-        imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["sound", "sfx", "retro", "8bit"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Ultimate FPS Controller",
-        description: "Production-ready First Person Controller script with movement, jumping, crouching, and sliding.",
-        category: "Scripts",
-        price: 0,
-        rating: 4.9,
-        downloads: 1500,
-        imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["script", "fps", "controller", "code"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Magic Spells VFX",
-        description: "Stunning particle effects for magic spells. Fireballs, ice shards, healing auras, and lightning strikes.",
-        category: "VFX",
-        price: 0,
-        rating: 4.8,
-        downloads: 980,
-        imageUrl: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["vfx", "magic", "particles"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Dungeon Ambient Music",
-        description: "Dark and atmospheric background music tracks for dungeon crawlers and horror games.",
-        category: "Sounds",
-        price: 0,
-        rating: 4.4,
-        downloads: 1200,
-        imageUrl: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["music", "ambient", "dungeon"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Modern Apartment Interior",
-        description: "Realistic 3D models of modern furniture and interior decor. Perfect for architectural visualization.",
-        category: "3D Models",
-        price: 0,
-        rating: 4.7,
-        downloads: 850,
-        imageUrl: "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["interior", "furniture", "modern"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Realistic Water Shader",
-        description: "High-performance water shader with reflection, refraction, and wave simulation.",
-        category: "VFX",
-        price: 0,
-        rating: 4.9,
-        downloads: 2300,
-        imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["shader", "water", "vfx"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Space Station Environment",
-        description: "Modular space station corridors and rooms. Build your own sci-fi levels easily.",
-        category: "3D Models",
-        price: 0,
-        rating: 4.6,
-        downloads: 1100,
-        imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["scifi", "space", "environment"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Horror Sound Pack",
-        description: "Terrifying sound effects for horror games. Screams, creaks, whispers, and jumpscares.",
-        category: "Sounds",
-        price: 0,
-        rating: 4.8,
-        downloads: 3100,
-        imageUrl: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["horror", "sound", "scary"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Inventory System",
-        description: "Flexible inventory system with drag-and-drop support, stacking, and equipment slots.",
-        category: "Scripts",
-        price: 0,
-        rating: 4.5,
-        downloads: 1800,
-        imageUrl: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["inventory", "system", "script"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Pixel Art Characters",
-        description: "A pack of 50 animated pixel art characters for 2D games. Heroes, monsters, and NPCs.",
-        category: "2D",
-        price: 0,
-        rating: 4.7,
-        downloads: 4200,
-        imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["pixelart", "2d", "character"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Orchestral Epic Music",
-        description: "Epic orchestral tracks for boss battles and cinematic cutscenes.",
-        category: "Sounds",
-        price: 0,
-        rating: 4.9,
-        downloads: 1600,
-        imageUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384ebd?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["music", "orchestral", "epic"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      },
-      {
-        title: "Vehicle Physics Controller",
-        description: "Realistic vehicle physics for racing games. Suspension, engine simulation, and drifting.",
-        category: "Scripts",
-        price: 0,
-        rating: 4.6,
-        downloads: 950,
-        imageUrl: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=800",
-        fileUrl: "https://drive.google.com/drive/u/0/my-drive",
-        tags: ["vehicle", "physics", "racing"],
-        approvalStatus: "approved",
-        author: admin.username,
-        creatorId: admin._id
-      }
-    ];
+    // Add author and creatorId to each seed asset
+    const assetsWithAuthor = seedAssets.map(asset => ({
+      ...asset,
+      author: admin.username,
+      creatorId: admin._id
+    }));
 
-    await Asset.create(dummyAssets);
+    await Asset.create(assetsWithAuthor);
 
     res.status(201).json({
       success: true,
       message: 'Assets seeded successfully',
-      data: dummyAssets
+      data: assetsWithAuthor
     });
   } catch (err) {
     console.error(err);

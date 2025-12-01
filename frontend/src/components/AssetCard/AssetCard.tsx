@@ -16,33 +16,25 @@ interface AssetProps {
 export default function AssetCard({ asset }: { asset: AssetProps }) {
     return (
         <Link href={`/asset/${asset._id}`} className="group block h-full">
-            <div className="bg-gradient-to-br from-[#111] to-[#0a0a0a] rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 h-full flex flex-col relative">
+            <div className="bg-linear-to-br from-[#111] to-[#0a0a0a] rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 h-full flex flex-col relative">
                 {/* Glow Effect on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/5 group-hover:via-cyan-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-cyan-500/0 via-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/5 group-hover:via-cyan-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl"></div>
 
                 {/* Thumbnail */}
-                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-cyan-900/20 to-blue-900/20">
+                <div className="relative aspect-video overflow-hidden bg-linear-to-br from-cyan-900/20 to-blue-900/20">
                     <img
                         src={asset.imageUrl}
                         alt={asset.title}
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            target.parentElement!.innerHTML = `
-                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-900/40 via-blue-900/30 to-blue-900/40 relative overflow-hidden">
-                                    <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.05) 10px, rgba(255,255,255,.05) 20px);"></div>
-                                    <div class="relative z-10 text-center">
-                                        <div class="text-white/80 text-lg font-semibold mb-2">Preview Unavailable</div>
-                                        <div class="text-gray-400 text-sm">Image could not be loaded</div>
-                                    </div>
-                                </div>
-                            `;
+                            target.src = '/PreviewUnavailable.png'; // Fallback image
+                            target.onerror = null; // Prevent infinite loop if fallback fails
                         }}
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
 
                     {/* Category Badge */}
                     <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/20 shadow-lg">
@@ -51,13 +43,13 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
 
                     {/* Free Badge */}
                     {asset.price === 0 && (
-                        <div className="absolute top-3 right-3 bg-gradient-to-r from-green-500 to-emerald-500 px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-lg shadow-green-500/50 animate-pulse">
+                        <div className="absolute top-3 right-3 bg-linear-to-r from-green-500 to-emerald-500 px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-lg shadow-green-500/50 animate-pulse">
                             FREE
                         </div>
                     )}
 
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                    <div className="absolute inset-0 bg-linear-to-t from-cyan-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                         <div className="flex items-center gap-2 text-white text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             View Details
                             <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
@@ -66,8 +58,8 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                 </div>
 
                 {/* Content */}
-                <div className="p-5 flex flex-col flex-grow relative z-10">
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300 line-clamp-1">
+                <div className="p-5 flex flex-col grow relative z-10">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300 line-clamp-1">
                         {asset.title}
                     </h3>
 
@@ -98,7 +90,7 @@ export default function AssetCard({ asset }: { asset: AssetProps }) {
                     {/* Price Tag */}
                     {asset.price > 0 && (
                         <div className="mt-3 text-center">
-                            <div className="inline-block px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg">
+                            <div className="inline-block px-4 py-2 bg-linear-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg">
                                 <span className="text-lg font-bold gradient-text">${asset.price}</span>
                             </div>
                         </div>
