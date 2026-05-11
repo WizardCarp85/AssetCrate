@@ -59,7 +59,7 @@ AssetCrate connects both sides in one platform.
 - **Creator**: Can download, upload, and manage their own assets
 - **Admin**: Supervises asset approval for platform security (admin only)
 
-## 📄 Pages
+## Pages
 
 - **Landing** (`/`) - Marketing page with features and CTAs
 - **Browse/Store** (`/browse`) - Asset catalog with search, filters, and pagination
